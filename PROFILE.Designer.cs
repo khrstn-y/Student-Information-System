@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PROFILE));
             pictureBox1 = new PictureBox();
             panel1 = new Panel();
             panel2 = new Panel();
@@ -36,11 +37,11 @@
             panel5 = new Panel();
             panel6 = new Panel();
             panel7 = new Panel();
-            panel8 = new Panel();
-            panel9 = new Panel();
-            panel10 = new Panel();
             panel11 = new Panel();
             panel12 = new Panel();
+            panel9 = new Panel();
+            panel10 = new Panel();
+            panel8 = new Panel();
             panel13 = new Panel();
             panel14 = new Panel();
             panel15 = new Panel();
@@ -50,8 +51,8 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel4.SuspendLayout();
             panel7.SuspendLayout();
-            panel9.SuspendLayout();
             panel11.SuspendLayout();
+            panel9.SuspendLayout();
             panel13.SuspendLayout();
             panel15.SuspendLayout();
             panel17.SuspendLayout();
@@ -141,15 +142,26 @@
             panel7.Size = new Size(247, 18);
             panel7.TabIndex = 32;
             // 
-            // panel8
+            // panel11
             // 
-            panel8.BackColor = Color.Transparent;
-            panel8.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel8.ForeColor = Color.White;
-            panel8.Location = new Point(115, 20);
-            panel8.Name = "panel8";
-            panel8.Size = new Size(205, 18);
-            panel8.TabIndex = 31;
+            panel11.BackColor = Color.Transparent;
+            panel11.Controls.Add(panel12);
+            panel11.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            panel11.ForeColor = Color.White;
+            panel11.Location = new Point(-59, 21);
+            panel11.Name = "panel11";
+            panel11.Size = new Size(306, 18);
+            panel11.TabIndex = 33;
+            // 
+            // panel12
+            // 
+            panel12.BackColor = Color.Transparent;
+            panel12.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            panel12.ForeColor = Color.White;
+            panel12.Location = new Point(115, 20);
+            panel12.Name = "panel12";
+            panel12.Size = new Size(205, 18);
+            panel12.TabIndex = 31;
             // 
             // panel9
             // 
@@ -172,26 +184,15 @@
             panel10.Size = new Size(205, 18);
             panel10.TabIndex = 31;
             // 
-            // panel11
+            // panel8
             // 
-            panel11.BackColor = Color.Transparent;
-            panel11.Controls.Add(panel12);
-            panel11.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel11.ForeColor = Color.White;
-            panel11.Location = new Point(-59, 21);
-            panel11.Name = "panel11";
-            panel11.Size = new Size(306, 18);
-            panel11.TabIndex = 33;
-            // 
-            // panel12
-            // 
-            panel12.BackColor = Color.Transparent;
-            panel12.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel12.ForeColor = Color.White;
-            panel12.Location = new Point(115, 20);
-            panel12.Name = "panel12";
-            panel12.Size = new Size(205, 18);
-            panel12.TabIndex = 31;
+            panel8.BackColor = Color.Transparent;
+            panel8.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            panel8.ForeColor = Color.White;
+            panel8.Location = new Point(115, 20);
+            panel8.Name = "panel8";
+            panel8.Size = new Size(205, 18);
+            panel8.TabIndex = 31;
             // 
             // panel13
             // 
@@ -256,7 +257,7 @@
             panel18.Size = new Size(205, 18);
             panel18.TabIndex = 31;
             // 
-            // Form5
+            // PROFILE
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -272,13 +273,14 @@
             Controls.Add(panel2);
             Controls.Add(panel1);
             Controls.Add(pictureBox1);
-            Name = "Form5";
-            Text = "Form5";
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "PROFILE";
+            Text = "BUCS Student Information System";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel4.ResumeLayout(false);
             panel7.ResumeLayout(false);
-            panel9.ResumeLayout(false);
             panel11.ResumeLayout(false);
+            panel9.ResumeLayout(false);
             panel13.ResumeLayout(false);
             panel15.ResumeLayout(false);
             panel17.ResumeLayout(false);

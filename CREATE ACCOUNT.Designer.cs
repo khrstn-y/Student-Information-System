@@ -266,8 +266,9 @@
             Controls.Add(cyberTextBox1);
             Controls.Add(button1);
             Controls.Add(button2);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form3";
-            Text = "Form3";
+            Text = "BUCS Student Information System";
             ResumeLayout(false);
         }
 

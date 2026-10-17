@@ -404,8 +404,9 @@
             Controls.Add(cyberTextBox2);
             Controls.Add(cyberTextBox1);
             Controls.Add(cyberTextBox5);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form4";
-            Text = "Form4";
+            Text = "BUCS Student Information System";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }

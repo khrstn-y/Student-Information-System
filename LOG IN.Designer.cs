@@ -138,8 +138,9 @@
             Controls.Add(button1);
             Controls.Add(cyberTextBox2);
             Controls.Add(cyberTextBox1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form2";
-            Text = "Form2";
+            Text = "BUCS Student Information System";
             ResumeLayout(false);
         }
 

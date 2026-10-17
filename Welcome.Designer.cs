@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Welcome));
             button1 = new Button();
             button2 = new Button();
             SuspendLayout();
@@ -64,7 +65,7 @@
             button2.TextImageRelation = TextImageRelation.TextAboveImage;
             button2.UseVisualStyleBackColor = false;
             // 
-            // Form1
+            // Welcome
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -73,8 +74,9 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Name = "Form1";
-            Text = "Form1";
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "Welcome";
+            Text = "BUCS Student Information System";
             ResumeLayout(false);
         }
 
