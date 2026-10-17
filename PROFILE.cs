@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace BUCS_SIS
 {
-    public partial class Form5 : Form
+    public partial class PROFILE : Form
     {
-        public Form5()
+        public PROFILE()
         {
             InitializeComponent();
         }
