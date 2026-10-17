@@ -34,6 +34,7 @@
             panel4 = new Panel();
             panel5 = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel4.SuspendLayout();
             SuspendLayout();
@@ -41,7 +42,7 @@
             // pictureBox1
             // 
             pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox1.Location = new Point(12, 12);
+            pictureBox1.Location = new Point(657, 12);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(100, 100);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -53,7 +54,7 @@
             panel2.BackColor = Color.Transparent;
             panel2.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
             panel2.ForeColor = Color.White;
-            panel2.Location = new Point(118, 33);
+            panel2.Location = new Point(238, 33);
             panel2.Name = "panel2";
             panel2.Size = new Size(413, 40);
             panel2.TabIndex = 30;
@@ -64,7 +65,7 @@
             panel4.Controls.Add(panel5);
             panel4.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
             panel4.ForeColor = Color.White;
-            panel4.Location = new Point(118, 79);
+            panel4.Location = new Point(238, 79);
             panel4.Name = "panel4";
             panel4.Size = new Size(413, 18);
             panel4.TabIndex = 32;
@@ -107,12 +108,25 @@
             tableLayoutPanel1.Size = new Size(726, 350);
             tableLayoutPanel1.TabIndex = 33;
             // 
+            // button1
+            // 
+            button1.BackColor = Color.Transparent;
+            button1.BackgroundImage = Properties.Resources.BACK_BUTTON;
+            button1.FlatAppearance.BorderSize = 0;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Location = new Point(21, 12);
+            button1.Name = "button1";
+            button1.Size = new Size(39, 41);
+            button1.TabIndex = 34;
+            button1.UseVisualStyleBackColor = false;
+            // 
             // FACULTY_PROFILE
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(884, 501);
+            Controls.Add(button1);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(panel4);
             Controls.Add(panel2);
@@ -132,5 +146,6 @@
         private Panel panel4;
         private Panel panel5;
         private TableLayoutPanel tableLayoutPanel1;
+        private Button button1;
     }
 }

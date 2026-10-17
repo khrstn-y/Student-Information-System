@@ -48,6 +48,7 @@
             panel16 = new Panel();
             panel17 = new Panel();
             panel18 = new Panel();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel4.SuspendLayout();
             panel7.SuspendLayout();
@@ -257,12 +258,25 @@
             panel18.Size = new Size(205, 18);
             panel18.TabIndex = 31;
             // 
+            // button1
+            // 
+            button1.BackColor = Color.Transparent;
+            button1.BackgroundImage = Properties.Resources.BACK_BUTTON;
+            button1.FlatAppearance.BorderSize = 0;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Location = new Point(37, 448);
+            button1.Name = "button1";
+            button1.Size = new Size(40, 41);
+            button1.TabIndex = 37;
+            button1.UseVisualStyleBackColor = false;
+            // 
             // PROFILE
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.CS_SIS_7_;
             ClientSize = new Size(884, 501);
+            Controls.Add(button1);
             Controls.Add(panel17);
             Controls.Add(panel15);
             Controls.Add(panel13);
@@ -308,5 +322,6 @@
         private Panel panel16;
         private Panel panel17;
         private Panel panel18;
+        private Button button1;
     }
 }

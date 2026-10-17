@@ -37,6 +37,7 @@
             cyberTextBox4 = new ReaLTaiizor.Controls.CyberTextBox();
             cyberTextBox5 = new ReaLTaiizor.Controls.CyberTextBox();
             cyberTextBox6 = new ReaLTaiizor.Controls.CyberTextBox();
+            button3 = new Button();
             SuspendLayout();
             // 
             // button2
@@ -252,12 +253,25 @@
             cyberTextBox6.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             cyberTextBox6.Timer_RGB = 300;
             // 
+            // button3
+            // 
+            button3.BackColor = Color.Transparent;
+            button3.BackgroundImage = Properties.Resources.BACK_BUTTON;
+            button3.FlatAppearance.BorderSize = 0;
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Location = new Point(380, 46);
+            button3.Name = "button3";
+            button3.Size = new Size(40, 41);
+            button3.TabIndex = 35;
+            button3.UseVisualStyleBackColor = false;
+            // 
             // Form3
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.CREATE;
             ClientSize = new Size(884, 501);
+            Controls.Add(button3);
             Controls.Add(cyberTextBox6);
             Controls.Add(cyberTextBox5);
             Controls.Add(cyberTextBox4);
@@ -282,5 +296,6 @@
         private ReaLTaiizor.Controls.CyberTextBox cyberTextBox4;
         private ReaLTaiizor.Controls.CyberTextBox cyberTextBox5;
         private ReaLTaiizor.Controls.CyberTextBox cyberTextBox6;
+        private Button button3;
     }
 }

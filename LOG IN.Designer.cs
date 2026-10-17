@@ -33,6 +33,7 @@
             cyberTextBox2 = new ReaLTaiizor.Controls.CyberTextBox();
             button1 = new Button();
             button2 = new Button();
+            button3 = new Button();
             SuspendLayout();
             // 
             // cyberTextBox1
@@ -128,12 +129,25 @@
             button2.TextImageRelation = TextImageRelation.TextAboveImage;
             button2.UseVisualStyleBackColor = false;
             // 
+            // button3
+            // 
+            button3.BackColor = Color.Transparent;
+            button3.BackgroundImage = Properties.Resources.BACK_BUTTON;
+            button3.FlatAppearance.BorderSize = 0;
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Location = new Point(26, 27);
+            button3.Name = "button3";
+            button3.Size = new Size(38, 41);
+            button3.TabIndex = 35;
+            button3.UseVisualStyleBackColor = false;
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(884, 501);
+            Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(cyberTextBox2);
@@ -150,5 +164,6 @@
         private ReaLTaiizor.Controls.CyberTextBox cyberTextBox2;
         private Button button1;
         private Button button2;
+        private Button button3;
     }
 }

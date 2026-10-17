@@ -44,6 +44,7 @@
             button4 = new Button();
             comboBox2 = new ComboBox();
             comboBox1 = new ComboBox();
+            button5 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -383,12 +384,25 @@
             comboBox1.Size = new Size(193, 26);
             comboBox1.TabIndex = 30;
             // 
+            // button5
+            // 
+            button5.BackColor = Color.Transparent;
+            button5.BackgroundImage = Properties.Resources.BACK_BUTTON;
+            button5.FlatAppearance.BorderSize = 0;
+            button5.FlatStyle = FlatStyle.Flat;
+            button5.Location = new Point(39, 405);
+            button5.Name = "button5";
+            button5.Size = new Size(37, 41);
+            button5.TabIndex = 35;
+            button5.UseVisualStyleBackColor = false;
+            // 
             // Form4
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.CS_SIS_6_;
             ClientSize = new Size(884, 501);
+            Controls.Add(button5);
             Controls.Add(comboBox1);
             Controls.Add(comboBox2);
             Controls.Add(button4);
@@ -428,5 +442,6 @@
         private Button button4;
         private ComboBox comboBox2;
         private ComboBox comboBox1;
+        private Button button5;
     }
 }
