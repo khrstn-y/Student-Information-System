@@ -34,9 +34,6 @@
             cyberTextBox2 = new ReaLTaiizor.Controls.CyberTextBox();
             cyberTextBox3 = new ReaLTaiizor.Controls.CyberTextBox();
             cyberTextBox4 = new ReaLTaiizor.Controls.CyberTextBox();
-            cyberTextBox6 = new ReaLTaiizor.Controls.CyberTextBox();
-            cyberTextBox8 = new ReaLTaiizor.Controls.CyberTextBox();
-            cyberTextBox10 = new ReaLTaiizor.Controls.CyberTextBox();
             button1 = new Button();
             button2 = new Button();
             button3 = new Button();
@@ -45,6 +42,9 @@
             comboBox2 = new ComboBox();
             comboBox1 = new ComboBox();
             button5 = new Button();
+            textBox1 = new TextBox();
+            textBox2 = new TextBox();
+            textBox3 = new TextBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -198,96 +198,6 @@
             cyberTextBox4.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             cyberTextBox4.Timer_RGB = 300;
             // 
-            // cyberTextBox6
-            // 
-            cyberTextBox6.Alpha = 20;
-            cyberTextBox6.BackColor = Color.Transparent;
-            cyberTextBox6.Background_WidthPen = 3F;
-            cyberTextBox6.BackgroundPen = true;
-            cyberTextBox6.ColorBackground = Color.White;
-            cyberTextBox6.ColorBackground_Pen = Color.Transparent;
-            cyberTextBox6.ColorLighting = Color.Transparent;
-            cyberTextBox6.ColorPen_1 = Color.Transparent;
-            cyberTextBox6.ColorPen_2 = Color.Transparent;
-            cyberTextBox6.CyberTextBoxStyle = ReaLTaiizor.Enum.Cyber.StateStyle.Custom;
-            cyberTextBox6.Font = new Font("Montserrat Light", 7F);
-            cyberTextBox6.ForeColor = Color.Black;
-            cyberTextBox6.Lighting = false;
-            cyberTextBox6.LinearGradientPen = false;
-            cyberTextBox6.Location = new Point(660, 284);
-            cyberTextBox6.Name = "cyberTextBox6";
-            cyberTextBox6.PenWidth = 15;
-            cyberTextBox6.RGB = false;
-            cyberTextBox6.Rounding = true;
-            cyberTextBox6.RoundingInt = 60;
-            cyberTextBox6.Size = new Size(193, 30);
-            cyberTextBox6.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            cyberTextBox6.TabIndex = 19;
-            cyberTextBox6.Tag = "Cyber";
-            cyberTextBox6.TextButton = "";
-            cyberTextBox6.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            cyberTextBox6.Timer_RGB = 300;
-            // 
-            // cyberTextBox8
-            // 
-            cyberTextBox8.Alpha = 20;
-            cyberTextBox8.BackColor = Color.Transparent;
-            cyberTextBox8.Background_WidthPen = 3F;
-            cyberTextBox8.BackgroundPen = true;
-            cyberTextBox8.ColorBackground = Color.White;
-            cyberTextBox8.ColorBackground_Pen = Color.Transparent;
-            cyberTextBox8.ColorLighting = Color.Transparent;
-            cyberTextBox8.ColorPen_1 = Color.Transparent;
-            cyberTextBox8.ColorPen_2 = Color.Transparent;
-            cyberTextBox8.CyberTextBoxStyle = ReaLTaiizor.Enum.Cyber.StateStyle.Custom;
-            cyberTextBox8.Font = new Font("Montserrat Light", 7F);
-            cyberTextBox8.ForeColor = Color.Black;
-            cyberTextBox8.Lighting = false;
-            cyberTextBox8.LinearGradientPen = false;
-            cyberTextBox8.Location = new Point(660, 211);
-            cyberTextBox8.Name = "cyberTextBox8";
-            cyberTextBox8.PenWidth = 15;
-            cyberTextBox8.RGB = false;
-            cyberTextBox8.Rounding = true;
-            cyberTextBox8.RoundingInt = 60;
-            cyberTextBox8.Size = new Size(193, 30);
-            cyberTextBox8.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            cyberTextBox8.TabIndex = 17;
-            cyberTextBox8.Tag = "Cyber";
-            cyberTextBox8.TextButton = "";
-            cyberTextBox8.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            cyberTextBox8.Timer_RGB = 300;
-            // 
-            // cyberTextBox10
-            // 
-            cyberTextBox10.Alpha = 20;
-            cyberTextBox10.BackColor = Color.Transparent;
-            cyberTextBox10.Background_WidthPen = 3F;
-            cyberTextBox10.BackgroundPen = true;
-            cyberTextBox10.ColorBackground = Color.White;
-            cyberTextBox10.ColorBackground_Pen = Color.Transparent;
-            cyberTextBox10.ColorLighting = Color.Transparent;
-            cyberTextBox10.ColorPen_1 = Color.Transparent;
-            cyberTextBox10.ColorPen_2 = Color.Transparent;
-            cyberTextBox10.CyberTextBoxStyle = ReaLTaiizor.Enum.Cyber.StateStyle.Custom;
-            cyberTextBox10.Font = new Font("Montserrat Light", 7F);
-            cyberTextBox10.ForeColor = Color.Black;
-            cyberTextBox10.Lighting = false;
-            cyberTextBox10.LinearGradientPen = false;
-            cyberTextBox10.Location = new Point(660, 136);
-            cyberTextBox10.Name = "cyberTextBox10";
-            cyberTextBox10.PenWidth = 15;
-            cyberTextBox10.RGB = false;
-            cyberTextBox10.Rounding = true;
-            cyberTextBox10.RoundingInt = 60;
-            cyberTextBox10.Size = new Size(193, 30);
-            cyberTextBox10.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            cyberTextBox10.TabIndex = 15;
-            cyberTextBox10.Tag = "Cyber";
-            cyberTextBox10.TextButton = "";
-            cyberTextBox10.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            cyberTextBox10.Timer_RGB = 300;
-            // 
             // button1
             // 
             button1.BackColor = Color.Transparent;
@@ -390,11 +300,35 @@
             button5.BackgroundImage = Properties.Resources.BACK_BUTTON;
             button5.FlatAppearance.BorderSize = 0;
             button5.FlatStyle = FlatStyle.Flat;
-            button5.Location = new Point(39, 405);
+            button5.Location = new Point(44, 425);
             button5.Name = "button5";
             button5.Size = new Size(37, 41);
             button5.TabIndex = 35;
             button5.UseVisualStyleBackColor = false;
+            // 
+            // textBox1
+            // 
+            textBox1.Font = new Font("Montserrat Light", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox1.Location = new Point(660, 293);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(193, 21);
+            textBox1.TabIndex = 36;
+            // 
+            // textBox2
+            // 
+            textBox2.Font = new Font("Montserrat Light", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox2.Location = new Point(660, 215);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(193, 21);
+            textBox2.TabIndex = 37;
+            // 
+            // textBox3
+            // 
+            textBox3.Font = new Font("Montserrat Light", 8.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox3.Location = new Point(660, 142);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(193, 21);
+            textBox3.TabIndex = 38;
             // 
             // Form4
             // 
@@ -402,6 +336,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.CS_SIS_6_;
             ClientSize = new Size(884, 501);
+            Controls.Add(textBox3);
+            Controls.Add(textBox2);
+            Controls.Add(textBox1);
             Controls.Add(button5);
             Controls.Add(comboBox1);
             Controls.Add(comboBox2);
@@ -410,9 +347,6 @@
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
-            Controls.Add(cyberTextBox6);
-            Controls.Add(cyberTextBox8);
-            Controls.Add(cyberTextBox10);
             Controls.Add(cyberTextBox4);
             Controls.Add(cyberTextBox3);
             Controls.Add(cyberTextBox2);
@@ -423,6 +357,7 @@
             Text = "BUCS Student Information System";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -432,9 +367,6 @@
         private ReaLTaiizor.Controls.CyberTextBox cyberTextBox2;
         private ReaLTaiizor.Controls.CyberTextBox cyberTextBox3;
         private ReaLTaiizor.Controls.CyberTextBox cyberTextBox4;
-        private ReaLTaiizor.Controls.CyberTextBox cyberTextBox6;
-        private ReaLTaiizor.Controls.CyberTextBox cyberTextBox8;
-        private ReaLTaiizor.Controls.CyberTextBox cyberTextBox10;
         private Button button1;
         private Button button2;
         private Button button3;
@@ -443,5 +375,8 @@
         private ComboBox comboBox2;
         private ComboBox comboBox1;
         private Button button5;
+        private TextBox textBox1;
+        private TextBox textBox2;
+        private TextBox textBox3;
     }
 }

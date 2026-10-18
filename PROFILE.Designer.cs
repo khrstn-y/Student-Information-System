@@ -264,7 +264,7 @@
             button1.BackgroundImage = Properties.Resources.BACK_BUTTON;
             button1.FlatAppearance.BorderSize = 0;
             button1.FlatStyle = FlatStyle.Flat;
-            button1.Location = new Point(37, 448);
+            button1.Location = new Point(44, 425);
             button1.Name = "button1";
             button1.Size = new Size(40, 41);
             button1.TabIndex = 37;

@@ -121,22 +121,25 @@
   <data name="CREATE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CREATE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="CS SIS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CS SIS.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="CS SIS(6)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CS SIS(6).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CS SIS(8)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CS SIS(8).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TEXTBOX" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TEXTBOX1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CS SIS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CS SIS.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BACK BUTTON" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BACK BUTTON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CS SIS(8)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CS SIS(8).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="CS SIS(7)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CS SIS(7).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BACK BUTTON" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BACK BUTTON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CS SIS(13)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CS SIS(13).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

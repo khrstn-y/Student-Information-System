@@ -93,6 +93,16 @@ namespace BUCS_SIS.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CS_SIS_13_ {
+            get {
+                object obj = ResourceManager.GetObject("CS SIS(13)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CS_SIS_6_ {
             get {
                 object obj = ResourceManager.GetObject("CS SIS(6)", resourceCulture);
