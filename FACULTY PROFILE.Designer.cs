@@ -201,29 +201,35 @@
             // textBox2
             // 
             textBox2.Font = new Font("Montserrat Light", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox2.ForeColor = SystemColors.WindowFrame;
             textBox2.Location = new Point(332, 417);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(425, 26);
             textBox2.TabIndex = 38;
+            textBox2.Text = "Student name...";
             // 
             // comboBox2
             // 
             comboBox2.FlatStyle = FlatStyle.Flat;
             comboBox2.Font = new Font("Montserrat Light", 8.999999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            comboBox2.ForeColor = SystemColors.WindowFrame;
             comboBox2.FormattingEnabled = true;
             comboBox2.Items.AddRange(new object[] { "Regular", "Irregular", "Transferee" });
             comboBox2.Location = new Point(169, 417);
             comboBox2.Name = "comboBox2";
             comboBox2.Size = new Size(168, 26);
             comboBox2.TabIndex = 39;
+            comboBox2.Text = "Status";
             // 
             // textBox1
             // 
             textBox1.Font = new Font("Montserrat Light", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox1.ForeColor = SystemColors.WindowFrame;
             textBox1.Location = new Point(31, 417);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(143, 26);
             textBox1.TabIndex = 40;
+            textBox1.Text = "Student Id...";
             // 
             // FACULTY_PROFILE
             // 
