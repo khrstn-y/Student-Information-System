@@ -29,41 +29,41 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Welcome));
-            button1 = new Button();
-            button2 = new Button();
+            LOG_STUD = new Button();
+            LOG_PROF = new Button();
             SuspendLayout();
             // 
-            // button1
+            // LOG_STUD
             // 
-            button1.BackColor = Color.Transparent;
-            button1.BackgroundImage = Properties.Resources.TEXTBOX;
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(496, 283);
-            button1.Name = "button1";
-            button1.Size = new Size(246, 60);
-            button1.TabIndex = 0;
-            button1.Text = "LOG IN AS STUDENT";
-            button1.TextImageRelation = TextImageRelation.TextAboveImage;
-            button1.UseVisualStyleBackColor = false;
+            LOG_STUD.BackColor = Color.Transparent;
+            LOG_STUD.BackgroundImage = Properties.Resources.TEXTBOX;
+            LOG_STUD.FlatAppearance.BorderSize = 0;
+            LOG_STUD.FlatStyle = FlatStyle.Flat;
+            LOG_STUD.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            LOG_STUD.ForeColor = Color.White;
+            LOG_STUD.Location = new Point(496, 283);
+            LOG_STUD.Name = "LOG_STUD";
+            LOG_STUD.Size = new Size(246, 60);
+            LOG_STUD.TabIndex = 0;
+            LOG_STUD.Text = "LOG IN AS STUDENT";
+            LOG_STUD.TextImageRelation = TextImageRelation.TextAboveImage;
+            LOG_STUD.UseVisualStyleBackColor = false;
             // 
-            // button2
+            // LOG_PROF
             // 
-            button2.BackColor = Color.Transparent;
-            button2.BackgroundImage = Properties.Resources.TEXTBOX;
-            button2.FlatAppearance.BorderSize = 0;
-            button2.FlatStyle = FlatStyle.Flat;
-            button2.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button2.ForeColor = Color.White;
-            button2.Location = new Point(496, 407);
-            button2.Name = "button2";
-            button2.Size = new Size(246, 60);
-            button2.TabIndex = 1;
-            button2.Text = "LOG IN AS PROFESSOR";
-            button2.TextImageRelation = TextImageRelation.TextAboveImage;
-            button2.UseVisualStyleBackColor = false;
+            LOG_PROF.BackColor = Color.Transparent;
+            LOG_PROF.BackgroundImage = Properties.Resources.TEXTBOX;
+            LOG_PROF.FlatAppearance.BorderSize = 0;
+            LOG_PROF.FlatStyle = FlatStyle.Flat;
+            LOG_PROF.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            LOG_PROF.ForeColor = Color.White;
+            LOG_PROF.Location = new Point(496, 407);
+            LOG_PROF.Name = "LOG_PROF";
+            LOG_PROF.Size = new Size(246, 60);
+            LOG_PROF.TabIndex = 1;
+            LOG_PROF.Text = "LOG IN AS PROFESSOR";
+            LOG_PROF.TextImageRelation = TextImageRelation.TextAboveImage;
+            LOG_PROF.UseVisualStyleBackColor = false;
             // 
             // Welcome
             // 
@@ -71,8 +71,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.CS_SIS;
             ClientSize = new Size(884, 501);
-            Controls.Add(button2);
-            Controls.Add(button1);
+            Controls.Add(LOG_PROF);
+            Controls.Add(LOG_STUD);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Welcome";
@@ -82,7 +82,7 @@
 
         #endregion
 
-        private Button button1;
-        private Button button2;
+        private Button LOG_STUD;
+        private Button LOG_PROF;
     }
 }
