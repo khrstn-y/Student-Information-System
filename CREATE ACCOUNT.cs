@@ -5,12 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using BUCS_SIS;
 
 namespace BUCS_SIS
 {
-    public partial class Form3 : Form
+    public partial class SignUpForm : Form
     {
-        public Form3()
+        public SignUpForm()
         {
             InitializeComponent();
         }
