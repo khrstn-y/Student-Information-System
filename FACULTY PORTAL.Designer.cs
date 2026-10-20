@@ -1,6 +1,6 @@
 ﻿namespace BUCS_SIS
 {
-    partial class Form1
+    partial class TeacherLoginForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StudentLoginForm));
             cyberTextBox1 = new ReaLTaiizor.Controls.CyberTextBox();
             cyberTextBox2 = new ReaLTaiizor.Controls.CyberTextBox();
             cyberTextBox3 = new ReaLTaiizor.Controls.CyberTextBox();

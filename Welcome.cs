@@ -2,11 +2,11 @@ using System;
 using System.Windows.Forms;
 using BUCS_SIS;
 
-namespace Student_Information_System
+namespace BUCS_SIS
 {
-    public partial class WelcomeForm : Form
+    public partial class Welcome : Form
     {
-        public WelcomeForm()
+        public Welcome()
         {
             InitializeComponent();
 
@@ -14,7 +14,7 @@ namespace Student_Information_System
             LOG_PROF.Click += LOG_PROF_Click;
         }
 
-        private void LOG_STUD_Click(object sender, EventArgs e)
+        private void LOG_STUD_Click(object? sender, EventArgs e)
         {
             using (StudentLoginForm loginForm = new StudentLoginForm())
             {
@@ -22,7 +22,7 @@ namespace Student_Information_System
             }
         }
 
-        private void LOG_PROF_Click(object sender, EventArgs e)
+        private void LOG_PROF_Click(object? sender, EventArgs e)
         {
             using (TeacherLoginForm loginForm = new TeacherLoginForm())
             {
