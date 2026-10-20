@@ -25,5 +25,10 @@ namespace BUCS_SIS
         {
 
         }
+
+        private void StudentLoginForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

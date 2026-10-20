@@ -48,7 +48,7 @@
             cyberTextBox1.ColorPen_1 = Color.Transparent;
             cyberTextBox1.ColorPen_2 = Color.Transparent;
             cyberTextBox1.CyberTextBoxStyle = ReaLTaiizor.Enum.Cyber.StateStyle.Custom;
-            cyberTextBox1.Font = new Font("Montserrat Light", 10F);
+            cyberTextBox1.Font = new Font("Microsoft Sans Serif", 10F);
             cyberTextBox1.ForeColor = Color.Black;
             cyberTextBox1.Lighting = false;
             cyberTextBox1.LinearGradientPen = false;
@@ -78,7 +78,7 @@
             cyberTextBox2.ColorPen_1 = Color.Transparent;
             cyberTextBox2.ColorPen_2 = Color.Transparent;
             cyberTextBox2.CyberTextBoxStyle = ReaLTaiizor.Enum.Cyber.StateStyle.Custom;
-            cyberTextBox2.Font = new Font("Montserrat Light", 10F);
+            cyberTextBox2.Font = new Font("Microsoft Sans Serif", 10F);
             cyberTextBox2.ForeColor = Color.Black;
             cyberTextBox2.Lighting = false;
             cyberTextBox2.LinearGradientPen = false;
@@ -102,7 +102,7 @@
             button1.BackgroundImage = (Image)resources.GetObject("button1.BackgroundImage");
             button1.FlatAppearance.BorderSize = 0;
             button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button1.ForeColor = Color.White;
             button1.Location = new Point(271, 406);
             button1.Name = "button1";
@@ -119,7 +119,7 @@
             button2.BackgroundImage = (Image)resources.GetObject("button2.BackgroundImage");
             button2.FlatAppearance.BorderSize = 0;
             button2.FlatStyle = FlatStyle.Flat;
-            button2.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button2.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button2.ForeColor = Color.White;
             button2.Location = new Point(466, 406);
             button2.Name = "button2";
@@ -141,7 +141,7 @@
             button3.TabIndex = 35;
             button3.UseVisualStyleBackColor = false;
             // 
-            // Form2
+            // StudentLoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -153,8 +153,9 @@
             Controls.Add(cyberTextBox2);
             Controls.Add(cyberTextBox1);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "Form2";
+            Name = "StudentLoginForm";
             Text = "BUCS Student Information System";
+            Load += StudentLoginForm_Load;
             ResumeLayout(false);
         }
 
