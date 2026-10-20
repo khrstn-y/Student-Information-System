@@ -29,86 +29,86 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PROFILE));
-            pictureBox1 = new PictureBox();
-            panel1 = new Panel();
-            panel2 = new Panel();
-            panel3 = new Panel();
-            panel4 = new Panel();
+            picStudent = new PictureBox();
+            pnlSurname = new Panel();
+            pnlFirstName = new Panel();
+            pnlStudentId = new Panel();
+            pnlEmail = new Panel();
             panel5 = new Panel();
-            panel6 = new Panel();
-            panel7 = new Panel();
+            pnlYearBlockProgram = new Panel();
+            pnlStatus = new Panel();
             panel11 = new Panel();
             panel12 = new Panel();
             panel9 = new Panel();
             panel10 = new Panel();
             panel8 = new Panel();
-            panel13 = new Panel();
+            pnlBirth = new Panel();
             panel14 = new Panel();
-            panel15 = new Panel();
+            pnlGender = new Panel();
             panel16 = new Panel();
-            panel17 = new Panel();
+            pnlContact = new Panel();
             panel18 = new Panel();
-            button1 = new Button();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            panel4.SuspendLayout();
-            panel7.SuspendLayout();
+            btnBack = new Button();
+            ((System.ComponentModel.ISupportInitialize)picStudent).BeginInit();
+            pnlEmail.SuspendLayout();
+            pnlStatus.SuspendLayout();
             panel11.SuspendLayout();
             panel9.SuspendLayout();
-            panel13.SuspendLayout();
-            panel15.SuspendLayout();
-            panel17.SuspendLayout();
+            pnlBirth.SuspendLayout();
+            pnlGender.SuspendLayout();
+            pnlContact.SuspendLayout();
             SuspendLayout();
             // 
-            // pictureBox1
+            // picStudent
             // 
-            pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox1.Location = new Point(66, 166);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(229, 250);
-            pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
-            pictureBox1.TabIndex = 27;
-            pictureBox1.TabStop = false;
+            picStudent.BorderStyle = BorderStyle.FixedSingle;
+            picStudent.Location = new Point(66, 166);
+            picStudent.Name = "picStudent";
+            picStudent.Size = new Size(229, 250);
+            picStudent.SizeMode = PictureBoxSizeMode.CenterImage;
+            picStudent.TabIndex = 27;
+            picStudent.TabStop = false;
             // 
-            // panel1
+            // pnlSurname
             // 
-            panel1.BackColor = Color.Transparent;
-            panel1.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel1.ForeColor = Color.White;
-            panel1.Location = new Point(311, 141);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(413, 57);
-            panel1.TabIndex = 28;
+            pnlSurname.BackColor = Color.Transparent;
+            pnlSurname.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pnlSurname.ForeColor = Color.White;
+            pnlSurname.Location = new Point(311, 141);
+            pnlSurname.Name = "pnlSurname";
+            pnlSurname.Size = new Size(413, 57);
+            pnlSurname.TabIndex = 28;
             // 
-            // panel2
+            // pnlFirstName
             // 
-            panel2.BackColor = Color.Transparent;
-            panel2.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel2.ForeColor = Color.White;
-            panel2.Location = new Point(311, 204);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(413, 40);
-            panel2.TabIndex = 29;
+            pnlFirstName.BackColor = Color.Transparent;
+            pnlFirstName.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pnlFirstName.ForeColor = Color.White;
+            pnlFirstName.Location = new Point(311, 204);
+            pnlFirstName.Name = "pnlFirstName";
+            pnlFirstName.Size = new Size(413, 40);
+            pnlFirstName.TabIndex = 29;
             // 
-            // panel3
+            // pnlStudentId
             // 
-            panel3.BackColor = Color.Transparent;
-            panel3.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel3.ForeColor = Color.White;
-            panel3.Location = new Point(441, 263);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(336, 18);
-            panel3.TabIndex = 30;
+            pnlStudentId.BackColor = Color.Transparent;
+            pnlStudentId.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pnlStudentId.ForeColor = Color.White;
+            pnlStudentId.Location = new Point(441, 263);
+            pnlStudentId.Name = "pnlStudentId";
+            pnlStudentId.Size = new Size(336, 18);
+            pnlStudentId.TabIndex = 30;
             // 
-            // panel4
+            // pnlEmail
             // 
-            panel4.BackColor = Color.Transparent;
-            panel4.Controls.Add(panel5);
-            panel4.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel4.ForeColor = Color.White;
-            panel4.Location = new Point(386, 285);
-            panel4.Name = "panel4";
-            panel4.Size = new Size(391, 18);
-            panel4.TabIndex = 31;
+            pnlEmail.BackColor = Color.Transparent;
+            pnlEmail.Controls.Add(panel5);
+            pnlEmail.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pnlEmail.ForeColor = Color.White;
+            pnlEmail.Location = new Point(386, 285);
+            pnlEmail.Name = "pnlEmail";
+            pnlEmail.Size = new Size(391, 18);
+            pnlEmail.TabIndex = 31;
             // 
             // panel5
             // 
@@ -120,28 +120,28 @@
             panel5.Size = new Size(205, 18);
             panel5.TabIndex = 31;
             // 
-            // panel6
+            // pnlYearBlockProgram
             // 
-            panel6.BackColor = Color.Transparent;
-            panel6.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel6.ForeColor = Color.White;
-            panel6.Location = new Point(559, 306);
-            panel6.Name = "panel6";
-            panel6.Size = new Size(218, 18);
-            panel6.TabIndex = 32;
+            pnlYearBlockProgram.BackColor = Color.Transparent;
+            pnlYearBlockProgram.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pnlYearBlockProgram.ForeColor = Color.White;
+            pnlYearBlockProgram.Location = new Point(559, 306);
+            pnlYearBlockProgram.Name = "pnlYearBlockProgram";
+            pnlYearBlockProgram.Size = new Size(218, 18);
+            pnlYearBlockProgram.TabIndex = 32;
             // 
-            // panel7
+            // pnlStatus
             // 
-            panel7.BackColor = Color.Transparent;
-            panel7.Controls.Add(panel11);
-            panel7.Controls.Add(panel9);
-            panel7.Controls.Add(panel8);
-            panel7.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel7.ForeColor = Color.White;
-            panel7.Location = new Point(530, 327);
-            panel7.Name = "panel7";
-            panel7.Size = new Size(247, 18);
-            panel7.TabIndex = 32;
+            pnlStatus.BackColor = Color.Transparent;
+            pnlStatus.Controls.Add(panel11);
+            pnlStatus.Controls.Add(panel9);
+            pnlStatus.Controls.Add(panel8);
+            pnlStatus.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pnlStatus.ForeColor = Color.White;
+            pnlStatus.Location = new Point(530, 327);
+            pnlStatus.Name = "pnlStatus";
+            pnlStatus.Size = new Size(247, 18);
+            pnlStatus.TabIndex = 32;
             // 
             // panel11
             // 
@@ -195,16 +195,16 @@
             panel8.Size = new Size(205, 18);
             panel8.TabIndex = 31;
             // 
-            // panel13
+            // pnlBirth
             // 
-            panel13.BackColor = Color.Transparent;
-            panel13.Controls.Add(panel14);
-            panel13.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel13.ForeColor = Color.White;
-            panel13.Location = new Point(471, 348);
-            panel13.Name = "panel13";
-            panel13.Size = new Size(306, 18);
-            panel13.TabIndex = 34;
+            pnlBirth.BackColor = Color.Transparent;
+            pnlBirth.Controls.Add(panel14);
+            pnlBirth.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pnlBirth.ForeColor = Color.White;
+            pnlBirth.Location = new Point(471, 348);
+            pnlBirth.Name = "pnlBirth";
+            pnlBirth.Size = new Size(306, 18);
+            pnlBirth.TabIndex = 34;
             // 
             // panel14
             // 
@@ -216,16 +216,16 @@
             panel14.Size = new Size(205, 18);
             panel14.TabIndex = 31;
             // 
-            // panel15
+            // pnlGender
             // 
-            panel15.BackColor = Color.Transparent;
-            panel15.Controls.Add(panel16);
-            panel15.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel15.ForeColor = Color.White;
-            panel15.Location = new Point(400, 368);
-            panel15.Name = "panel15";
-            panel15.Size = new Size(377, 18);
-            panel15.TabIndex = 35;
+            pnlGender.BackColor = Color.Transparent;
+            pnlGender.Controls.Add(panel16);
+            pnlGender.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pnlGender.ForeColor = Color.White;
+            pnlGender.Location = new Point(400, 368);
+            pnlGender.Name = "pnlGender";
+            pnlGender.Size = new Size(377, 18);
+            pnlGender.TabIndex = 35;
             // 
             // panel16
             // 
@@ -237,16 +237,16 @@
             panel16.Size = new Size(205, 18);
             panel16.TabIndex = 31;
             // 
-            // panel17
+            // pnlContact
             // 
-            panel17.BackColor = Color.Transparent;
-            panel17.Controls.Add(panel18);
-            panel17.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel17.ForeColor = Color.White;
-            panel17.Location = new Point(501, 390);
-            panel17.Name = "panel17";
-            panel17.Size = new Size(276, 18);
-            panel17.TabIndex = 36;
+            pnlContact.BackColor = Color.Transparent;
+            pnlContact.Controls.Add(panel18);
+            pnlContact.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pnlContact.ForeColor = Color.White;
+            pnlContact.Location = new Point(501, 390);
+            pnlContact.Name = "pnlContact";
+            pnlContact.Size = new Size(276, 18);
+            pnlContact.TabIndex = 36;
             // 
             // panel18
             // 
@@ -258,17 +258,17 @@
             panel18.Size = new Size(205, 18);
             panel18.TabIndex = 31;
             // 
-            // button1
+            // btnBack
             // 
-            button1.BackColor = Color.Transparent;
-            button1.BackgroundImage = Properties.Resources.BACK_BUTTON;
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Location = new Point(44, 425);
-            button1.Name = "button1";
-            button1.Size = new Size(40, 41);
-            button1.TabIndex = 37;
-            button1.UseVisualStyleBackColor = false;
+            btnBack.BackColor = Color.Transparent;
+            btnBack.BackgroundImage = Properties.Resources.BACK_BUTTON;
+            btnBack.FlatAppearance.BorderSize = 0;
+            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.Location = new Point(44, 425);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(40, 41);
+            btnBack.TabIndex = 37;
+            btnBack.UseVisualStyleBackColor = false;
             // 
             // PROFILE
             // 
@@ -276,52 +276,52 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.CS_SIS_7_;
             ClientSize = new Size(884, 501);
-            Controls.Add(button1);
-            Controls.Add(panel17);
-            Controls.Add(panel15);
-            Controls.Add(panel13);
-            Controls.Add(panel7);
-            Controls.Add(panel6);
-            Controls.Add(panel4);
-            Controls.Add(panel3);
-            Controls.Add(panel2);
-            Controls.Add(panel1);
-            Controls.Add(pictureBox1);
+            Controls.Add(btnBack);
+            Controls.Add(pnlContact);
+            Controls.Add(pnlGender);
+            Controls.Add(pnlBirth);
+            Controls.Add(pnlStatus);
+            Controls.Add(pnlYearBlockProgram);
+            Controls.Add(pnlEmail);
+            Controls.Add(pnlStudentId);
+            Controls.Add(pnlFirstName);
+            Controls.Add(pnlSurname);
+            Controls.Add(picStudent);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "PROFILE";
             Text = "BUCS Student Information System";
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            panel4.ResumeLayout(false);
-            panel7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picStudent).EndInit();
+            pnlEmail.ResumeLayout(false);
+            pnlStatus.ResumeLayout(false);
             panel11.ResumeLayout(false);
             panel9.ResumeLayout(false);
-            panel13.ResumeLayout(false);
-            panel15.ResumeLayout(false);
-            panel17.ResumeLayout(false);
+            pnlBirth.ResumeLayout(false);
+            pnlGender.ResumeLayout(false);
+            pnlContact.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
-        private PictureBox pictureBox1;
-        private Panel panel1;
-        private Panel panel2;
-        private Panel panel3;
-        private Panel panel4;
+        private PictureBox picStudent;
+        private Panel pnlSurname;
+        private Panel pnlFirstName;
+        private Panel pnlStudentId;
+        private Panel pnlEmail;
         private Panel panel5;
-        private Panel panel6;
-        private Panel panel7;
+        private Panel pnlYearBlockProgram;
+        private Panel pnlStatus;
         private Panel panel11;
         private Panel panel12;
         private Panel panel9;
         private Panel panel10;
         private Panel panel8;
-        private Panel panel13;
+        private Panel pnlBirth;
         private Panel panel14;
-        private Panel panel15;
+        private Panel pnlGender;
         private Panel panel16;
-        private Panel panel17;
+        private Panel pnlContact;
         private Panel panel18;
-        private Button button1;
+        private Button btnBack;
     }
 }
