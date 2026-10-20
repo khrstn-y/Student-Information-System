@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,25 +18,79 @@ namespace BUCS_SIS
 
         private bool isLoggingIn;
 
-        // Available after successful authentication.
-        public int AuthenticatedTeacherId { get; private set; }
-        public string AuthenticatedTeacherEmail { get; private set; } = "";
-
         public TeacherLoginForm()
         {
             InitializeComponent();
 
-            Text = "Teacher Login";
+            Text = "Faculty Portal";
 
             SetPasswordMode(txtPassword);
             SetPasswordMode(txtTeacherCode);
 
             btnLogin.Click += BtnLogin_Click;
             btnBack.Click += BtnBack_Click;
+
             FormClosing += TeacherLoginForm_FormClosing;
 
             AcceptButton = btnLogin;
             CancelButton = btnBack;
+        }
+
+        // Supports standard TextBox controls and CyberTextBox
+        // controls containing an inner standard TextBox.
+        private static TextBox? FindTextBox(Control control)
+        {
+            if (control is TextBox textBox)
+            {
+                return textBox;
+            }
+
+            foreach (Control child in control.Controls)
+            {
+                TextBox? found = FindTextBox(child);
+
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+
+            return null;
+        }
+
+        private static string ReadInput(Control control)
+        {
+            return FindTextBox(control)?.Text ?? control.Text;
+        }
+
+        private static void ClearInput(Control control)
+        {
+            TextBox? textBox = FindTextBox(control);
+
+            if (textBox != null)
+            {
+                textBox.Clear();
+            }
+            else
+            {
+                control.Text = "";
+            }
+        }
+
+        private static void FocusInput(Control control)
+        {
+            Control target = FindTextBox(control) ?? control;
+            target.Focus();
+        }
+
+        private static void SetPasswordMode(Control control)
+        {
+            TextBox? textBox = FindTextBox(control);
+
+            if (textBox != null)
+            {
+                textBox.UseSystemPasswordChar = true;
+            }
         }
 
         private async void BtnLogin_Click(
@@ -55,7 +111,6 @@ namespace BUCS_SIS
                 ShowRequiredMessage(
                     "Please enter your email address.",
                     txtIdentity);
-
                 return;
             }
 
@@ -64,7 +119,6 @@ namespace BUCS_SIS
                 ShowRequiredMessage(
                     "Please enter your password.",
                     txtPassword);
-
                 return;
             }
 
@@ -73,22 +127,23 @@ namespace BUCS_SIS
                 ShowRequiredMessage(
                     "Please enter your assigned teacher code.",
                     txtTeacherCode);
-
                 return;
             }
 
             SetBusy(true);
 
+            int authenticatedTeacherId = 0;
+
             try
             {
                 int teacherId = 0;
-                string storedEmail = "";
-                byte[] storedHash = Array.Empty<byte>();
-                byte[] storedSalt = Array.Empty<byte>();
-                byte[] storedCodeHash = Array.Empty<byte>();
                 int iterations = 0;
 
-                using (MySqlConnection connection =
+                byte[] storedPasswordHash = Array.Empty<byte>();
+                byte[] storedSalt = Array.Empty<byte>();
+                byte[] storedCodeHash = Array.Empty<byte>();
+
+                using (var connection =
                     new MySqlConnection(connectionString))
                 {
                     await connection.OpenAsync();
@@ -96,7 +151,6 @@ namespace BUCS_SIS
                     const string sql = @"
                         SELECT
                             account_id,
-                            email,
                             password_hash,
                             password_salt,
                             password_iterations,
@@ -106,28 +160,27 @@ namespace BUCS_SIS
                           AND is_active = TRUE
                         LIMIT 1;";
 
-                    using (MySqlCommand command =
-                        new MySqlCommand(sql, connection))
-                    {
-                        command.Parameters.Add(
-                            "@email",
-                            MySqlDbType.VarChar,
-                            254).Value = email;
+                    using var command =
+                        new MySqlCommand(sql, connection);
 
-                        using (var reader =
-                            await command.ExecuteReaderAsync())
-                        {
-                            if (await reader.ReadAsync())
-                            {
-                                teacherId = reader.GetInt32(0);
-                                storedEmail = reader.GetString(1);
-                                storedHash = (byte[])reader.GetValue(2);
-                                storedSalt = (byte[])reader.GetValue(3);
-                                iterations = reader.GetInt32(4);
-                                storedCodeHash =
-                                    (byte[])reader.GetValue(5);
-                            }
-                        }
+                    command.Parameters.Add(
+                        "@email",
+                        MySqlDbType.VarChar,
+                        254).Value = email;
+
+                    using var reader =
+                        await command.ExecuteReaderAsync();
+
+                    if (await reader.ReadAsync())
+                    {
+                        teacherId = reader.GetInt32(0);
+                        storedPasswordHash =
+                            (byte[])reader.GetValue(1);
+                        storedSalt =
+                            (byte[])reader.GetValue(2);
+                        iterations = reader.GetInt32(3);
+                        storedCodeHash =
+                            (byte[])reader.GetValue(4);
                     }
                 }
 
@@ -137,7 +190,23 @@ namespace BUCS_SIS
                     return;
                 }
 
-                // Check the password and code against the SAME account.
+                if (storedPasswordHash.Length != 32 ||
+                    storedSalt.Length != 16 ||
+                    storedCodeHash.Length != 32 ||
+                    iterations < 1 ||
+                    iterations > 2000000)
+                {
+                    MessageBox.Show(
+                        this,
+                        "This teacher account has invalid authentication " +
+                        "data. Check its database setup.",
+                        "Account Setup Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+
+                    return;
+                }
+
                 bool valid = await Task.Run(() =>
                 {
                     byte[] enteredPasswordHash =
@@ -148,13 +217,14 @@ namespace BUCS_SIS
                             HashAlgorithmName.SHA256,
                             32);
 
-                    byte[] enteredCodeHash = SHA256.HashData(
-                        Encoding.UTF8.GetBytes(teacherCode));
+                    byte[] enteredCodeHash =
+                        SHA256.HashData(
+                            Encoding.UTF8.GetBytes(teacherCode));
 
                     bool passwordMatches =
                         CryptographicOperations.FixedTimeEquals(
                             enteredPasswordHash,
-                            storedHash);
+                            storedPasswordHash);
 
                     bool codeMatches =
                         CryptographicOperations.FixedTimeEquals(
@@ -170,30 +240,51 @@ namespace BUCS_SIS
                     return;
                 }
 
-                AuthenticatedTeacherId = teacherId;
-                AuthenticatedTeacherEmail = storedEmail;
+                // Confirm that the professor has an assigned profile.
+                using (var connection =
+                    new MySqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
 
-                ClearInput(txtPassword);
-                ClearInput(txtTeacherCode);
+                    using var command = new MySqlCommand(@"
+                        SELECT f.account_id
+                        FROM faculty_profiles f
+                        INNER JOIN faculty_cohorts c
+                            ON c.cohort_id = f.cohort_id
+                        WHERE f.account_id = @id
+                        LIMIT 1;",
+                        connection);
 
-                MessageBox.Show(
-                    this,
-                    "Teacher login successful!",
-                    "Welcome",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    command.Parameters.Add(
+                        "@id",
+                        MySqlDbType.Int32).Value = teacherId;
 
-                // Authentication is complete.
-                // Open the teacher profile here when it is ready,
-                // passing AuthenticatedTeacherId to load its data.
+                    object? result =
+                        await command.ExecuteScalarAsync();
+
+                    if (result == null || result == DBNull.Value)
+                    {
+                        MessageBox.Show(
+                            this,
+                            "Your login details are correct, but your " +
+                            "faculty profile and cohort assignment " +
+                            "have not been configured.",
+                            "Faculty Assignment Required",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+
+                        return;
+                    }
+                }
+
+                authenticatedTeacherId = teacherId;
             }
-            catch (MySqlException)
+            catch (MySqlException ex)
             {
                 MessageBox.Show(
                     this,
-                    "Unable to connect to the teacher account database.\n\n" +
-                    "Check your MySQL connection settings and " +
-                    "make sure the teacher_accounts table exists.",
+                    "Unable to check your teacher account.\n\n" +
+                    ex.Message,
                     "Database Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -203,7 +294,7 @@ namespace BUCS_SIS
                 MessageBox.Show(
                     this,
                     "Login could not be completed. " +
-                    "Please check the account setup and try again.",
+                    "Check the teacher account setup and try again.",
                     "Login Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -212,13 +303,51 @@ namespace BUCS_SIS
             {
                 SetBusy(false);
             }
+
+            if (authenticatedTeacherId <= 0)
+            {
+                return;
+            }
+
+            ClearInput(txtPassword);
+            ClearInput(txtTeacherCode);
+
+            using (FacultyProfileForm facultyForm =
+                new FacultyProfileForm(authenticatedTeacherId))
+            {
+                facultyForm.StartPosition =
+                    FormStartPosition.CenterParent;
+
+                Hide();
+
+                try
+                {
+                    facultyForm.ShowDialog(this);
+                }
+                finally
+                {
+                    Show();
+                    FocusInput(txtPassword);
+                }
+            }
+        }
+
+        private void ShowRequiredMessage(
+            string message,
+            Control input)
+        {
+            MessageBox.Show(
+                this,
+                message,
+                "Missing Information",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+
+            FocusInput(input);
         }
 
         private void ShowInvalidLogin()
         {
-            AuthenticatedTeacherId = 0;
-            AuthenticatedTeacherEmail = "";
-
             MessageBox.Show(
                 this,
                 "Invalid email, password, or teacher code.",
@@ -244,88 +373,9 @@ namespace BUCS_SIS
             btnBack.Enabled = !busy;
         }
 
-        private static TextBox? FindTextBox(Control control)
-        {
-            if (control is TextBox textBox)
-            {
-                return textBox;
-            }
-
-            foreach (Control child in control.Controls)
-            {
-                TextBox? result = FindTextBox(child);
-
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-
-            return null;
-        }
-
-        private static string ReadInput(Control control)
-        {
-            TextBox? textBox = FindTextBox(control);
-
-            return textBox != null
-                ? textBox.Text
-                : control.Text;
-        }
-
-        private static void ClearInput(Control control)
-        {
-            TextBox? textBox = FindTextBox(control);
-
-            if (textBox != null)
-            {
-                textBox.Clear();
-            }
-            else
-            {
-                control.Text = "";
-            }
-        }
-
-        private static void SetPasswordMode(Control control)
-        {
-            TextBox? textBox = FindTextBox(control);
-
-            if (textBox != null)
-            {
-                textBox.UseSystemPasswordChar = true;
-            }
-        }
-
-        private static void FocusInput(Control control)
-        {
-            TextBox? textBox = FindTextBox(control);
-
-            if (textBox != null)
-            {
-                textBox.Focus();
-            }
-            else
-            {
-                control.Focus();
-            }
-        }
-
-        private void ShowRequiredMessage(
-            string message,
-            Control input)
-        {
-            MessageBox.Show(
-                this,
-                message,
-                "Missing Information",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
-
-            FocusInput(input);
-        }
-
-        private void BtnBack_Click(object? sender, EventArgs e)
+        private void BtnBack_Click(
+            object? sender,
+            EventArgs e)
         {
             if (!isLoggingIn)
             {
