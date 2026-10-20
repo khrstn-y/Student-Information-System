@@ -20,5 +20,10 @@ namespace BUCS_SIS
         {
 
         }
+
+        private void cyberTextBox1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
