@@ -326,7 +326,7 @@
             // 
             dtpBirth.Location = new Point(660, 214);
             dtpBirth.Name = "dtpBirth";
-            dtpBirth.Size = new Size(200, 23);
+            dtpBirth.Size = new Size(193, 23);
             dtpBirth.TabIndex = 39;
             // 
             // Form4
