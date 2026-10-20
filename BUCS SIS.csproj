@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="MaterialSkin.2" Version="2.3.1" />
+    <PackageReference Include="MySql.Data" Version="26.7.0" />
     <PackageReference Include="ReaLTaiizor" Version="3.8.2.1" />
   </ItemGroup>
 
