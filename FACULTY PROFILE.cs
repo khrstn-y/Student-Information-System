@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
@@ -36,11 +38,15 @@ namespace BUCS_SIS
             public bool Included { get; set; }
         }
 
+        // Required by the Visual Studio Designer.
         public FacultyProfileForm()
         {
             InitializeComponent();
+
+            ConfigureUploadButton();
         }
 
+        // Open this constructor after successful teacher login.
         public FacultyProfileForm(int authenticatedTeacherId)
             : this()
         {
@@ -51,6 +57,46 @@ namespace BUCS_SIS
             }
 
             teacherAccountId = authenticatedTeacherId;
+        }
+
+        private void ConfigureUploadButton()
+        {
+            // Reuse an existing button if one was added in the Designer.
+            Control[] matches = Controls.Find("btnUploadPhoto", true);
+
+            Button upload;
+
+            if (matches.Length == 1 && matches[0] is Button existing)
+            {
+                upload = existing;
+            }
+            else if (matches.Length == 0)
+            {
+                upload = new Button
+                {
+                    Name = "btnUploadPhoto",
+                    Size = new Size(105, 42),
+                    Location = new Point(
+                        picProfessor.Right + 8,
+                        picProfessor.Top + 28),
+                    BackColor = Color.White,
+                    ForeColor = Color.Black,
+                    FlatStyle = FlatStyle.Flat,
+                    UseVisualStyleBackColor = false
+                };
+
+                Controls.Add(upload);
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    "Use only one Button named btnUploadPhoto.");
+            }
+
+            upload.Text = "Upload Picture";
+            upload.Click -= UploadProfessorPhoto;
+            upload.Click += UploadProfessorPhoto;
+            upload.BringToFront();
         }
 
         protected override void OnShown(EventArgs e)
@@ -96,7 +142,6 @@ namespace BUCS_SIS
             txtStudentId.MaxLength = 50;
             txtStudentId.PlaceholderText = "Student ID...";
 
-            // Professors can now type names for new students.
             txtName.ReadOnly = false;
             txtName.TabStop = true;
             txtName.MaxLength = 300;
@@ -236,17 +281,24 @@ namespace BUCS_SIS
             cohortId = Convert.ToInt32(reader["cohort_id"]);
 
             DisplayValue(
-                pnlName, reader["full_name"].ToString(), 18F);
+                pnlName,
+                reader["full_name"].ToString(),
+                18F);
 
             DisplayValue(
-                pnlEmail, reader["email"].ToString(), 11F);
+                pnlEmail,
+                reader["email"].ToString(),
+                11F);
 
             DisplayValue(
-                pnlBlock, reader["year_block_program"].ToString(), 12F);
+                pnlBlock,
+                reader["year_block_program"].ToString(),
+                12F);
 
-            byte[]? photo = reader["profile_picture"] == DBNull.Value
-                ? null
-                : (byte[])reader["profile_picture"];
+            byte[]? photo =
+                reader["profile_picture"] == DBNull.Value
+                    ? null
+                    : (byte[])reader["profile_picture"];
 
             SetProfessorPhoto(photo);
         }
@@ -258,9 +310,8 @@ namespace BUCS_SIS
 
             connection.Open();
 
-            // Registered accounts take priority over manual names.
-            // A matching manual entry also links a later signup
-            // to this cohort, without displaying a duplicate row.
+            // Registered account names take priority over manual names.
+            // Matching Student IDs appear only once.
             using var command = new MySqlCommand(@"
                 SELECT
                     a.student_id,
@@ -323,7 +374,6 @@ namespace BUCS_SIS
 
             command.Parameters.AddWithValue("@cohort", cohortId);
 
-            // Read everything before replacing the displayed roster.
             DataTable incoming = roster.Clone();
 
             using (var reader = command.ExecuteReader())
@@ -376,7 +426,7 @@ namespace BUCS_SIS
 
                 connection.Open();
 
-                // Existing account: use its saved name.
+                // Retrieve the official name if an account exists.
                 using var command = new MySqlCommand(@"
                     SELECT
                         a.student_id,
@@ -410,7 +460,6 @@ namespace BUCS_SIS
                     }
                 }
 
-                // No account: the professor must supply the name.
                 if (string.IsNullOrWhiteSpace(fullName))
                 {
                     ShowError(
@@ -429,7 +478,10 @@ namespace BUCS_SIS
 
                     if (existing == null)
                     {
-                        roster.Rows.Add(studentId, status, fullName);
+                        roster.Rows.Add(
+                            studentId,
+                            status,
+                            fullName);
                     }
                     else
                     {
@@ -456,7 +508,8 @@ namespace BUCS_SIS
             }
             catch (MySqlException ex)
             {
-                ShowError("Unable to add the student.\n\n" + ex.Message);
+                ShowError(
+                    "Unable to add the student.\n\n" + ex.Message);
             }
         }
 
@@ -479,6 +532,7 @@ namespace BUCS_SIS
             {
                 ShowError(
                     "Enter a listed Student ID or select a student.");
+
                 return;
             }
 
@@ -507,7 +561,8 @@ namespace BUCS_SIS
         }
 
         private void RosterSelectionChanged(
-            object? sender, EventArgs e)
+            object? sender,
+            EventArgs e)
         {
             if (suppressSelection)
                 return;
@@ -537,7 +592,10 @@ namespace BUCS_SIS
         {
             if (pending.Count == 0)
             {
-                MessageBox.Show(this, "There are no changes to save.");
+                MessageBox.Show(
+                    this,
+                    "There are no changes to save.");
+
                 return;
             }
 
@@ -548,9 +606,9 @@ namespace BUCS_SIS
 
                 connection.Open();
 
-                using var transaction = connection.BeginTransaction();
+                using var transaction =
+                    connection.BeginTransaction();
 
-                // Recheck the teacher's active account and assignment.
                 using (var check = new MySqlCommand(@"
                     SELECT f.cohort_id
                     FROM faculty_profiles f
@@ -559,7 +617,8 @@ namespace BUCS_SIS
                     WHERE f.account_id = @teacher
                       AND t.is_active = TRUE
                     FOR UPDATE;",
-                    connection, transaction))
+                    connection,
+                    transaction))
                 {
                     check.Parameters.AddWithValue(
                         "@teacher", teacherAccountId);
@@ -575,13 +634,13 @@ namespace BUCS_SIS
                     }
                 }
 
-                // Serialize saves by professors sharing this cohort.
                 using (var cohortLock = new MySqlCommand(@"
                     SELECT cohort_id
                     FROM faculty_cohorts
                     WHERE cohort_id = @cohort
                     FOR UPDATE;",
-                    connection, transaction))
+                    connection,
+                    transaction))
                 {
                     cohortLock.Parameters.AddWithValue(
                         "@cohort", cohortId);
@@ -595,7 +654,10 @@ namespace BUCS_SIS
 
                 foreach (RosterChange change in pending.Values)
                 {
-                    SaveRosterChange(connection, transaction, change);
+                    SaveRosterChange(
+                        connection,
+                        transaction,
+                        change);
                 }
 
                 transaction.Commit();
@@ -626,7 +688,8 @@ namespace BUCS_SIS
             {
                 ShowError(
                     "Changes were saved, but the roster could not " +
-                    "be refreshed. Reopen this window.\n\n" + ex.Message);
+                    "be refreshed. Reopen this window.\n\n" +
+                    ex.Message);
             }
         }
 
@@ -635,16 +698,17 @@ namespace BUCS_SIS
             MySqlTransaction transaction,
             RosterChange change)
         {
-            // Resolve the account again at save time:
-            // the student may have signed up after Add Student.
             int? studentAccountId = null;
 
+            // Recheck because the student may have signed up
+            // after the professor clicked Add Student.
             using (var lookup = new MySqlCommand(@"
                 SELECT account_id
                 FROM student_accounts
                 WHERE student_id = @studentId
                 FOR UPDATE;",
-                connection, transaction))
+                connection,
+                transaction))
             {
                 lookup.Parameters.AddWithValue(
                     "@studentId", change.StudentId);
@@ -659,7 +723,6 @@ namespace BUCS_SIS
 
             if (studentAccountId.HasValue)
             {
-                // Registered students use the existing overrides table.
                 using var command = new MySqlCommand(@"
                     INSERT INTO faculty_roster_overrides
                     (
@@ -672,28 +735,35 @@ namespace BUCS_SIS
                     ON DUPLICATE KEY UPDATE
                         is_included = @included,
                         enrollment_status = @status;",
-                    connection, transaction);
+                    connection,
+                    transaction);
 
-                command.Parameters.AddWithValue("@cohort", cohortId);
+                command.Parameters.AddWithValue(
+                    "@cohort", cohortId);
+
                 command.Parameters.AddWithValue(
                     "@account", studentAccountId.Value);
 
                 command.Parameters.AddWithValue(
                     "@included", change.Included);
 
-                command.Parameters.AddWithValue("@status", change.Status);
+                command.Parameters.AddWithValue(
+                    "@status", change.Status);
+
                 command.ExecuteNonQuery();
 
-                // Keep any earlier manual record consistent.
                 using var updateManual = new MySqlCommand(@"
                     UPDATE faculty_manual_students
                     SET is_included = @included,
                         enrollment_status = @status
                     WHERE cohort_id = @cohort
                       AND student_id = @studentId;",
-                    connection, transaction);
+                    connection,
+                    transaction);
 
-                updateManual.Parameters.AddWithValue("@cohort", cohortId);
+                updateManual.Parameters.AddWithValue(
+                    "@cohort", cohortId);
+
                 updateManual.Parameters.AddWithValue(
                     "@studentId", change.StudentId);
 
@@ -707,7 +777,7 @@ namespace BUCS_SIS
             }
             else
             {
-                // Manual records do not create login accounts.
+                // A manual student record does not create a login account.
                 using var command = new MySqlCommand(@"
                     INSERT INTO faculty_manual_students
                     (
@@ -729,14 +799,21 @@ namespace BUCS_SIS
                         full_name = @name,
                         enrollment_status = @status,
                         is_included = @included;",
-                    connection, transaction);
+                    connection,
+                    transaction);
 
-                command.Parameters.AddWithValue("@cohort", cohortId);
+                command.Parameters.AddWithValue(
+                    "@cohort", cohortId);
+
                 command.Parameters.AddWithValue(
                     "@studentId", change.StudentId);
 
-                command.Parameters.AddWithValue("@name", change.FullName);
-                command.Parameters.AddWithValue("@status", change.Status);
+                command.Parameters.AddWithValue(
+                    "@name", change.FullName);
+
+                command.Parameters.AddWithValue(
+                    "@status", change.Status);
+
                 command.Parameters.AddWithValue(
                     "@included", change.Included);
 
@@ -744,8 +821,181 @@ namespace BUCS_SIS
             }
         }
 
+        private void UploadProfessorPhoto(
+            object? sender,
+            EventArgs e)
+        {
+            if (teacherAccountId <= 0)
+            {
+                ShowError("Please log in first.");
+                return;
+            }
+
+            using OpenFileDialog dialog = new OpenFileDialog
+            {
+                Title = "Select Professor Picture",
+                Filter = "Image Files|*.jpg;*.jpeg;*.png",
+                Multiselect = false
+            };
+
+            if (dialog.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            byte[] pictureBytes;
+            Bitmap? preview = null;
+
+            try
+            {
+                const long maximumSize = 5 * 1024 * 1024;
+
+                if (new FileInfo(dialog.FileName).Length > maximumSize)
+                {
+                    ShowError(
+                        "Choose a picture no larger than 5 MB.");
+
+                    return;
+                }
+
+                using (Image original =
+                    Image.FromFile(dialog.FileName))
+                using (Bitmap square = new Bitmap(600, 600))
+                {
+                    // 600 pixels at 300 DPI = 2 inches.
+                    square.SetResolution(300, 300);
+
+                    int side = Math.Min(
+                        original.Width,
+                        original.Height);
+
+                    Rectangle source = new Rectangle(
+                        (original.Width - side) / 2,
+                        (original.Height - side) / 2,
+                        side,
+                        side);
+
+                    using (Graphics graphics =
+                        Graphics.FromImage(square))
+                    {
+                        graphics.Clear(Color.White);
+
+                        graphics.InterpolationMode =
+                            InterpolationMode.HighQualityBicubic;
+
+                        graphics.DrawImage(
+                            original,
+                            new Rectangle(0, 0, 600, 600),
+                            source,
+                            GraphicsUnit.Pixel);
+                    }
+
+                    using MemoryStream stream = new MemoryStream();
+
+                    square.Save(stream, ImageFormat.Jpeg);
+                    pictureBytes = stream.ToArray();
+
+                    preview = new Bitmap(square);
+                }
+            }
+            catch (Exception ex) when (IsPictureError(ex))
+            {
+                preview?.Dispose();
+
+                ShowError(
+                    "Unable to open this picture. " +
+                    "Choose a valid JPG or PNG.");
+
+                return;
+            }
+
+            try
+            {
+                using var connection =
+                    new MySqlConnection(connectionString);
+
+                connection.Open();
+
+                using var transaction =
+                    connection.BeginTransaction();
+
+                using (var check = new MySqlCommand(@"
+                    SELECT f.account_id
+                    FROM faculty_profiles f
+                    INNER JOIN teacher_accounts t
+                        ON t.account_id = f.account_id
+                    WHERE f.account_id = @teacher
+                      AND t.is_active = TRUE
+                    FOR UPDATE;",
+                    connection,
+                    transaction))
+                {
+                    check.Parameters.AddWithValue(
+                        "@teacher", teacherAccountId);
+
+                    if (check.ExecuteScalar() == null)
+                    {
+                        throw new InvalidOperationException(
+                            "Your faculty profile was not found " +
+                            "or your account is inactive.");
+                    }
+                }
+
+                using (var command = new MySqlCommand(@"
+                    UPDATE faculty_profiles
+                    SET profile_picture = @photo
+                    WHERE account_id = @teacher;",
+                    connection,
+                    transaction))
+                {
+                    command.Parameters.AddWithValue(
+                        "@teacher", teacherAccountId);
+
+                    command.Parameters.Add(
+                        "@photo",
+                        MySqlDbType.MediumBlob).Value = pictureBytes;
+
+                    command.ExecuteNonQuery();
+                }
+
+                transaction.Commit();
+            }
+            catch (Exception ex) when (
+                ex is MySqlException ||
+                ex is InvalidOperationException)
+            {
+                preview?.Dispose();
+
+                ShowError(
+                    "Unable to save your picture.\n\n" + ex.Message);
+
+                return;
+            }
+
+            // Display only after the database save succeeds.
+            Image? previous = picProfessor.Image;
+            picProfessor.Image = preview;
+            previous?.Dispose();
+
+            MessageBox.Show(
+                this,
+                "Your profile picture has been saved.",
+                "Picture Updated",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
+        private static bool IsPictureError(Exception ex)
+        {
+            return ex is ArgumentException ||
+                   ex is OutOfMemoryException ||
+                   ex is IOException ||
+                   ex is UnauthorizedAccessException ||
+                   ex is System.Runtime.InteropServices.ExternalException;
+        }
+
         private static void DisplayValue(
-            Control panel, string? value, float fontSize)
+            Control panel,
+            string? value,
+            float fontSize)
         {
             string labelName = panel.Name + "_Value";
             Label? label = panel.Controls[labelName] as Label;
@@ -789,13 +1039,11 @@ namespace BUCS_SIS
 
                 picProfessor.Image = new Bitmap(original);
             }
-            catch (Exception ex) when (
-                ex is ArgumentException ||
-                ex is OutOfMemoryException ||
-                ex is System.Runtime.InteropServices.ExternalException)
+            catch (Exception ex) when (IsPictureError(ex))
             {
                 ShowError(
-                    "The professor's saved picture could not be displayed.");
+                    "The professor's saved picture could not be displayed. " +
+                    "Use Upload Picture to replace it.");
             }
         }
 
