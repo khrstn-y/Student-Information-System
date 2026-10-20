@@ -34,7 +34,7 @@
             txtMiddleName = new ReaLTaiizor.Controls.CyberTextBox();
             txtLastName = new ReaLTaiizor.Controls.CyberTextBox();
             txtEmail = new ReaLTaiizor.Controls.CyberTextBox();
-            button1 = new Button();
+            btnSave = new Button();
             btnClear = new Button();
             btnView = new Button();
             picStudentPhoto = new PictureBox();
@@ -198,21 +198,21 @@
             txtEmail.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             txtEmail.Timer_RGB = 300;
             // 
-            // button1
+            // btnSave
             // 
-            button1.BackColor = Color.Transparent;
-            button1.BackgroundImage = (Image)resources.GetObject("button1.BackgroundImage");
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(144, 405);
-            button1.Name = "button1";
-            button1.Size = new Size(157, 37);
-            button1.TabIndex = 22;
-            button1.Text = "SAVE CHANGES";
-            button1.TextImageRelation = TextImageRelation.TextAboveImage;
-            button1.UseVisualStyleBackColor = false;
+            btnSave.BackColor = Color.Transparent;
+            btnSave.BackgroundImage = (Image)resources.GetObject("btnSave.BackgroundImage");
+            btnSave.FlatAppearance.BorderSize = 0;
+            btnSave.FlatStyle = FlatStyle.Flat;
+            btnSave.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSave.ForeColor = Color.White;
+            btnSave.Location = new Point(144, 405);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(157, 37);
+            btnSave.TabIndex = 22;
+            btnSave.Text = "SAVE CHANGES";
+            btnSave.TextImageRelation = TextImageRelation.TextAboveImage;
+            btnSave.UseVisualStyleBackColor = false;
             // 
             // btnClear
             // 
@@ -329,11 +329,11 @@
             dtpBirth.Size = new Size(193, 23);
             dtpBirth.TabIndex = 39;
             // 
-            // Form4
+            // StudentProfileUpdateForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackgroundImage = Properties.Resources.CS_SIS_6_;
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(884, 501);
             Controls.Add(dtpBirth);
             Controls.Add(txtYearBlockProgram);
@@ -345,14 +345,14 @@
             Controls.Add(picStudentPhoto);
             Controls.Add(btnView);
             Controls.Add(btnClear);
-            Controls.Add(button1);
+            Controls.Add(btnSave);
             Controls.Add(txtEmail);
             Controls.Add(txtLastName);
             Controls.Add(txtMiddleName);
             Controls.Add(txtFirstName);
             Controls.Add(txtStudentId);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "Form4";
+            Name = "StudentProfileUpdateForm";
             Text = "BUCS Student Information System";
             ((System.ComponentModel.ISupportInitialize)picStudentPhoto).EndInit();
             ResumeLayout(false);
@@ -366,7 +366,7 @@
         private ReaLTaiizor.Controls.CyberTextBox txtMiddleName;
         private ReaLTaiizor.Controls.CyberTextBox txtLastName;
         private ReaLTaiizor.Controls.CyberTextBox txtEmail;
-        private Button button1;
+        private Button btnSave;
         private Button btnClear;
         private Button btnView;
         private PictureBox picStudentPhoto;

@@ -125,9 +125,9 @@
             pnlYearBlockProgram.BackColor = Color.Transparent;
             pnlYearBlockProgram.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
             pnlYearBlockProgram.ForeColor = Color.White;
-            pnlYearBlockProgram.Location = new Point(559, 306);
+            pnlYearBlockProgram.Location = new Point(563, 306);
             pnlYearBlockProgram.Name = "pnlYearBlockProgram";
-            pnlYearBlockProgram.Size = new Size(218, 18);
+            pnlYearBlockProgram.Size = new Size(214, 18);
             pnlYearBlockProgram.TabIndex = 32;
             // 
             // pnlStatus
@@ -274,7 +274,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackgroundImage = Properties.Resources.CS_SIS_7_;
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(884, 501);
             Controls.Add(btnBack);
             Controls.Add(pnlContact);

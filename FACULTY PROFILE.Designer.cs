@@ -29,56 +29,56 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FACULTY_PROFILE));
-            pictureBox1 = new PictureBox();
-            panel2 = new Panel();
-            panel4 = new Panel();
+            picProfessor = new PictureBox();
+            pnlName = new Panel();
+            pnlBlock = new Panel();
             panel5 = new Panel();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            button1 = new Button();
-            panel1 = new Panel();
+            tablepanel = new TableLayoutPanel();
+            btnBack = new Button();
+            pnlEmail = new Panel();
             panel3 = new Panel();
-            btnLogin = new Button();
-            button2 = new Button();
-            button3 = new Button();
-            textBox2 = new TextBox();
-            comboBox2 = new ComboBox();
-            textBox1 = new TextBox();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            panel4.SuspendLayout();
-            panel1.SuspendLayout();
+            btnAdd = new Button();
+            btnDrop = new Button();
+            btnSave = new Button();
+            txtName = new TextBox();
+            cmbStatus = new ComboBox();
+            txtStudentId = new TextBox();
+            ((System.ComponentModel.ISupportInitialize)picProfessor).BeginInit();
+            pnlBlock.SuspendLayout();
+            pnlEmail.SuspendLayout();
             SuspendLayout();
             // 
-            // pictureBox1
+            // picProfessor
             // 
-            pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox1.Location = new Point(657, 12);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(100, 100);
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.TabIndex = 27;
-            pictureBox1.TabStop = false;
+            picProfessor.BorderStyle = BorderStyle.FixedSingle;
+            picProfessor.Location = new Point(657, 12);
+            picProfessor.Name = "picProfessor";
+            picProfessor.Size = new Size(100, 100);
+            picProfessor.SizeMode = PictureBoxSizeMode.Zoom;
+            picProfessor.TabIndex = 27;
+            picProfessor.TabStop = false;
             // 
-            // panel2
+            // pnlName
             // 
-            panel2.BackColor = Color.Transparent;
-            panel2.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel2.ForeColor = Color.White;
-            panel2.Location = new Point(238, 33);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(413, 40);
-            panel2.TabIndex = 30;
+            pnlName.BackColor = Color.Transparent;
+            pnlName.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pnlName.ForeColor = Color.White;
+            pnlName.Location = new Point(238, 33);
+            pnlName.Name = "pnlName";
+            pnlName.Size = new Size(413, 40);
+            pnlName.TabIndex = 30;
             // 
-            // panel4
+            // pnlBlock
             // 
-            panel4.BackColor = Color.Transparent;
-            panel4.Controls.Add(panel5);
-            panel4.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel4.ForeColor = Color.White;
-            panel4.Location = new Point(31, 117);
-            panel4.Name = "panel4";
-            panel4.Size = new Size(133, 18);
-            panel4.TabIndex = 32;
-            panel4.Paint += panel4_Paint;
+            pnlBlock.BackColor = Color.Transparent;
+            pnlBlock.Controls.Add(panel5);
+            pnlBlock.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pnlBlock.ForeColor = Color.White;
+            pnlBlock.Location = new Point(31, 117);
+            pnlBlock.Name = "pnlBlock";
+            pnlBlock.Size = new Size(133, 18);
+            pnlBlock.TabIndex = 32;
+            pnlBlock.Paint += panel4_Paint;
             // 
             // panel5
             // 
@@ -90,54 +90,54 @@
             panel5.Size = new Size(205, 18);
             panel5.TabIndex = 31;
             // 
-            // tableLayoutPanel1
+            // tablepanel
             // 
-            tableLayoutPanel1.BackColor = Color.Transparent;
-            tableLayoutPanel1.ColumnCount = 3;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 46.3576164F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 53.6423836F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 423F));
-            tableLayoutPanel1.Location = new Point(31, 153);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 13;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(726, 261);
-            tableLayoutPanel1.TabIndex = 17;
+            tablepanel.BackColor = Color.Transparent;
+            tablepanel.ColumnCount = 3;
+            tablepanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 46.3576164F));
+            tablepanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 53.6423836F));
+            tablepanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 423F));
+            tablepanel.Location = new Point(31, 153);
+            tablepanel.Name = "tablepanel";
+            tablepanel.RowCount = 13;
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tablepanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tablepanel.Size = new Size(726, 261);
+            tablepanel.TabIndex = 17;
             // 
-            // button1
+            // btnBack
             // 
-            button1.BackColor = Color.Transparent;
-            button1.BackgroundImage = Properties.Resources.BACK_BUTTON;
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Location = new Point(21, 12);
-            button1.Name = "button1";
-            button1.Size = new Size(39, 41);
-            button1.TabIndex = 34;
-            button1.UseVisualStyleBackColor = false;
+            btnBack.BackColor = Color.Transparent;
+            btnBack.BackgroundImage = Properties.Resources.BACK_BUTTON;
+            btnBack.FlatAppearance.BorderSize = 0;
+            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.Location = new Point(21, 12);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(39, 41);
+            btnBack.TabIndex = 34;
+            btnBack.UseVisualStyleBackColor = false;
             // 
-            // panel1
+            // pnlEmail
             // 
-            panel1.BackColor = Color.Transparent;
-            panel1.Controls.Add(panel3);
-            panel1.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            panel1.ForeColor = Color.White;
-            panel1.Location = new Point(238, 79);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(413, 18);
-            panel1.TabIndex = 33;
+            pnlEmail.BackColor = Color.Transparent;
+            pnlEmail.Controls.Add(panel3);
+            pnlEmail.Font = new Font("Montserrat ExtraBold", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            pnlEmail.ForeColor = Color.White;
+            pnlEmail.Location = new Point(238, 79);
+            pnlEmail.Name = "pnlEmail";
+            pnlEmail.Size = new Size(413, 18);
+            pnlEmail.TabIndex = 33;
             // 
             // panel3
             // 
@@ -149,87 +149,87 @@
             panel3.Size = new Size(205, 18);
             panel3.TabIndex = 31;
             // 
-            // btnLogin
+            // btnAdd
             // 
-            btnLogin.BackColor = Color.Transparent;
-            btnLogin.BackgroundImage = (Image)resources.GetObject("btnLogin.BackgroundImage");
-            btnLogin.FlatAppearance.BorderSize = 0;
-            btnLogin.FlatStyle = FlatStyle.Flat;
-            btnLogin.Font = new Font("Montserrat ExtraBold", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnLogin.ForeColor = Color.White;
-            btnLogin.Location = new Point(136, 449);
-            btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(148, 47);
-            btnLogin.TabIndex = 35;
-            btnLogin.Text = "ADD STUDENT";
-            btnLogin.TextImageRelation = TextImageRelation.TextAboveImage;
-            btnLogin.UseVisualStyleBackColor = false;
+            btnAdd.BackColor = Color.Transparent;
+            btnAdd.BackgroundImage = (Image)resources.GetObject("btnAdd.BackgroundImage");
+            btnAdd.FlatAppearance.BorderSize = 0;
+            btnAdd.FlatStyle = FlatStyle.Flat;
+            btnAdd.Font = new Font("Montserrat ExtraBold", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnAdd.ForeColor = Color.White;
+            btnAdd.Location = new Point(136, 449);
+            btnAdd.Name = "btnAdd";
+            btnAdd.Size = new Size(148, 47);
+            btnAdd.TabIndex = 35;
+            btnAdd.Text = "ADD STUDENT";
+            btnAdd.TextImageRelation = TextImageRelation.TextAboveImage;
+            btnAdd.UseVisualStyleBackColor = false;
             // 
-            // button2
+            // btnDrop
             // 
-            button2.BackColor = Color.Transparent;
-            button2.BackgroundImage = (Image)resources.GetObject("button2.BackgroundImage");
-            button2.FlatAppearance.BorderSize = 0;
-            button2.FlatStyle = FlatStyle.Flat;
-            button2.Font = new Font("Montserrat ExtraBold", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button2.ForeColor = Color.White;
-            button2.Location = new Point(340, 449);
-            button2.Name = "button2";
-            button2.Size = new Size(148, 47);
-            button2.TabIndex = 36;
-            button2.Text = "DROP STUDENT";
-            button2.TextImageRelation = TextImageRelation.TextAboveImage;
-            button2.UseVisualStyleBackColor = false;
-            button2.Click += button2_Click;
+            btnDrop.BackColor = Color.Transparent;
+            btnDrop.BackgroundImage = (Image)resources.GetObject("btnDrop.BackgroundImage");
+            btnDrop.FlatAppearance.BorderSize = 0;
+            btnDrop.FlatStyle = FlatStyle.Flat;
+            btnDrop.Font = new Font("Montserrat ExtraBold", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDrop.ForeColor = Color.White;
+            btnDrop.Location = new Point(340, 449);
+            btnDrop.Name = "btnDrop";
+            btnDrop.Size = new Size(148, 47);
+            btnDrop.TabIndex = 36;
+            btnDrop.Text = "DROP STUDENT";
+            btnDrop.TextImageRelation = TextImageRelation.TextAboveImage;
+            btnDrop.UseVisualStyleBackColor = false;
+            btnDrop.Click += button2_Click;
             // 
-            // button3
+            // btnSave
             // 
-            button3.BackColor = Color.Transparent;
-            button3.BackgroundImage = (Image)resources.GetObject("button3.BackgroundImage");
-            button3.FlatAppearance.BorderSize = 0;
-            button3.FlatStyle = FlatStyle.Flat;
-            button3.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button3.ForeColor = Color.White;
-            button3.Location = new Point(536, 449);
-            button3.Name = "button3";
-            button3.Size = new Size(148, 47);
-            button3.TabIndex = 37;
-            button3.Text = "SAVE";
-            button3.TextImageRelation = TextImageRelation.TextAboveImage;
-            button3.UseVisualStyleBackColor = false;
+            btnSave.BackColor = Color.Transparent;
+            btnSave.BackgroundImage = (Image)resources.GetObject("btnSave.BackgroundImage");
+            btnSave.FlatAppearance.BorderSize = 0;
+            btnSave.FlatStyle = FlatStyle.Flat;
+            btnSave.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSave.ForeColor = Color.White;
+            btnSave.Location = new Point(536, 449);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(148, 47);
+            btnSave.TabIndex = 37;
+            btnSave.Text = "SAVE";
+            btnSave.TextImageRelation = TextImageRelation.TextAboveImage;
+            btnSave.UseVisualStyleBackColor = false;
             // 
-            // textBox2
+            // txtName
             // 
-            textBox2.Font = new Font("Montserrat Light", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox2.ForeColor = SystemColors.WindowFrame;
-            textBox2.Location = new Point(332, 417);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(425, 26);
-            textBox2.TabIndex = 38;
-            textBox2.Text = "Student name...";
+            txtName.Font = new Font("Montserrat Light", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtName.ForeColor = SystemColors.WindowFrame;
+            txtName.Location = new Point(332, 417);
+            txtName.Name = "txtName";
+            txtName.Size = new Size(425, 26);
+            txtName.TabIndex = 38;
+            txtName.Text = "Student name...";
             // 
-            // comboBox2
+            // cmbStatus
             // 
-            comboBox2.FlatStyle = FlatStyle.Flat;
-            comboBox2.Font = new Font("Montserrat Light", 8.999999F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            comboBox2.ForeColor = SystemColors.WindowFrame;
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Items.AddRange(new object[] { "Regular", "Irregular", "Transferee" });
-            comboBox2.Location = new Point(169, 417);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(168, 26);
-            comboBox2.TabIndex = 39;
-            comboBox2.Text = "Status";
+            cmbStatus.FlatStyle = FlatStyle.Flat;
+            cmbStatus.Font = new Font("Montserrat Light", 8.999999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cmbStatus.ForeColor = SystemColors.WindowFrame;
+            cmbStatus.FormattingEnabled = true;
+            cmbStatus.Items.AddRange(new object[] { "Regular", "Irregular", "Transferee" });
+            cmbStatus.Location = new Point(169, 417);
+            cmbStatus.Name = "cmbStatus";
+            cmbStatus.Size = new Size(168, 26);
+            cmbStatus.TabIndex = 39;
+            cmbStatus.Text = "Status";
             // 
-            // textBox1
+            // txtStudentId
             // 
-            textBox1.Font = new Font("Montserrat Light", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox1.ForeColor = SystemColors.WindowFrame;
-            textBox1.Location = new Point(31, 417);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(143, 26);
-            textBox1.TabIndex = 40;
-            textBox1.Text = "Student Id...";
+            txtStudentId.Font = new Font("Montserrat Light", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtStudentId.ForeColor = SystemColors.WindowFrame;
+            txtStudentId.Location = new Point(31, 417);
+            txtStudentId.Name = "txtStudentId";
+            txtStudentId.Size = new Size(139, 26);
+            txtStudentId.TabIndex = 40;
+            txtStudentId.Text = "Student Id...";
             // 
             // FACULTY_PROFILE
             // 
@@ -237,43 +237,43 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(884, 501);
-            Controls.Add(textBox1);
-            Controls.Add(comboBox2);
-            Controls.Add(textBox2);
-            Controls.Add(button3);
-            Controls.Add(button2);
-            Controls.Add(btnLogin);
-            Controls.Add(panel1);
-            Controls.Add(button1);
-            Controls.Add(tableLayoutPanel1);
-            Controls.Add(panel4);
-            Controls.Add(panel2);
-            Controls.Add(pictureBox1);
+            Controls.Add(txtStudentId);
+            Controls.Add(cmbStatus);
+            Controls.Add(txtName);
+            Controls.Add(btnSave);
+            Controls.Add(btnDrop);
+            Controls.Add(btnAdd);
+            Controls.Add(pnlEmail);
+            Controls.Add(btnBack);
+            Controls.Add(tablepanel);
+            Controls.Add(pnlBlock);
+            Controls.Add(pnlName);
+            Controls.Add(picProfessor);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FACULTY_PROFILE";
             Text = "BUCS Student Information System";
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            panel4.ResumeLayout(false);
-            panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)picProfessor).EndInit();
+            pnlBlock.ResumeLayout(false);
+            pnlEmail.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private PictureBox pictureBox1;
-        private Panel panel2;
-        private Panel panel4;
+        private PictureBox picProfessor;
+        private Panel pnlName;
+        private Panel pnlBlock;
         private Panel panel5;
-        private TableLayoutPanel tableLayoutPanel1;
-        private Button button1;
-        private Panel panel1;
+        private TableLayoutPanel tablepanel;
+        private Button btnBack;
+        private Panel pnlEmail;
         private Panel panel3;
-        private Button btnLogin;
-        private Button button2;
-        private Button button3;
-        private TextBox textBox2;
-        private ComboBox comboBox2;
-        private TextBox textBox1;
+        private Button btnAdd;
+        private Button btnDrop;
+        private Button btnSave;
+        private TextBox txtName;
+        private ComboBox cmbStatus;
+        private TextBox txtStudentId;
     }
 }
