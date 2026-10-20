@@ -1,6 +1,6 @@
 ﻿namespace BUCS_SIS
 {
-    partial class Form4
+    partial class StudentProfileUpdateForm
     {
         /// <summary>
         /// Required designer variable.
