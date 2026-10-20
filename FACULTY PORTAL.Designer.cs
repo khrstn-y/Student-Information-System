@@ -28,155 +28,155 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StudentLoginForm));
-            cyberTextBox1 = new ReaLTaiizor.Controls.CyberTextBox();
-            cyberTextBox2 = new ReaLTaiizor.Controls.CyberTextBox();
-            cyberTextBox3 = new ReaLTaiizor.Controls.CyberTextBox();
-            button1 = new Button();
-            button3 = new Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TeacherLoginForm));
+            txtIdentity = new ReaLTaiizor.Controls.CyberTextBox();
+            txtPassword = new ReaLTaiizor.Controls.CyberTextBox();
+            txtTeacherCode = new ReaLTaiizor.Controls.CyberTextBox();
+            btnLogin = new Button();
+            btnBack = new Button();
             SuspendLayout();
             // 
-            // cyberTextBox1
+            // txtIdentity
             // 
-            cyberTextBox1.Alpha = 20;
-            cyberTextBox1.BackColor = Color.Transparent;
-            cyberTextBox1.Background_WidthPen = 3F;
-            cyberTextBox1.BackgroundPen = true;
-            cyberTextBox1.ColorBackground = Color.White;
-            cyberTextBox1.ColorBackground_Pen = Color.Transparent;
-            cyberTextBox1.ColorLighting = Color.Transparent;
-            cyberTextBox1.ColorPen_1 = Color.Transparent;
-            cyberTextBox1.ColorPen_2 = Color.Transparent;
-            cyberTextBox1.CyberTextBoxStyle = ReaLTaiizor.Enum.Cyber.StateStyle.Custom;
-            cyberTextBox1.Font = new Font("Montserrat Light", 10F);
-            cyberTextBox1.ForeColor = Color.Black;
-            cyberTextBox1.Lighting = false;
-            cyberTextBox1.LinearGradientPen = false;
-            cyberTextBox1.Location = new Point(352, 227);
-            cyberTextBox1.Name = "cyberTextBox1";
-            cyberTextBox1.PenWidth = 15;
-            cyberTextBox1.RGB = false;
-            cyberTextBox1.Rounding = true;
-            cyberTextBox1.RoundingInt = 60;
-            cyberTextBox1.Size = new Size(200, 40);
-            cyberTextBox1.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            cyberTextBox1.TabIndex = 1;
-            cyberTextBox1.Tag = "Cyber";
-            cyberTextBox1.TextButton = "";
-            cyberTextBox1.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            cyberTextBox1.Timer_RGB = 300;
+            txtIdentity.Alpha = 20;
+            txtIdentity.BackColor = Color.Transparent;
+            txtIdentity.Background_WidthPen = 3F;
+            txtIdentity.BackgroundPen = true;
+            txtIdentity.ColorBackground = Color.White;
+            txtIdentity.ColorBackground_Pen = Color.Transparent;
+            txtIdentity.ColorLighting = Color.Transparent;
+            txtIdentity.ColorPen_1 = Color.Transparent;
+            txtIdentity.ColorPen_2 = Color.Transparent;
+            txtIdentity.CyberTextBoxStyle = ReaLTaiizor.Enum.Cyber.StateStyle.Custom;
+            txtIdentity.Font = new Font("Montserrat Light", 10F);
+            txtIdentity.ForeColor = Color.Black;
+            txtIdentity.Lighting = false;
+            txtIdentity.LinearGradientPen = false;
+            txtIdentity.Location = new Point(352, 227);
+            txtIdentity.Name = "txtIdentity";
+            txtIdentity.PenWidth = 15;
+            txtIdentity.RGB = false;
+            txtIdentity.Rounding = true;
+            txtIdentity.RoundingInt = 60;
+            txtIdentity.Size = new Size(200, 40);
+            txtIdentity.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            txtIdentity.TabIndex = 1;
+            txtIdentity.Tag = "Cyber";
+            txtIdentity.TextButton = "";
+            txtIdentity.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            txtIdentity.Timer_RGB = 300;
             // 
-            // cyberTextBox2
+            // txtPassword
             // 
-            cyberTextBox2.Alpha = 20;
-            cyberTextBox2.BackColor = Color.Transparent;
-            cyberTextBox2.Background_WidthPen = 3F;
-            cyberTextBox2.BackgroundPen = true;
-            cyberTextBox2.ColorBackground = Color.White;
-            cyberTextBox2.ColorBackground_Pen = Color.Transparent;
-            cyberTextBox2.ColorLighting = Color.Transparent;
-            cyberTextBox2.ColorPen_1 = Color.Transparent;
-            cyberTextBox2.ColorPen_2 = Color.Transparent;
-            cyberTextBox2.CyberTextBoxStyle = ReaLTaiizor.Enum.Cyber.StateStyle.Custom;
-            cyberTextBox2.Font = new Font("Montserrat Light", 10F);
-            cyberTextBox2.ForeColor = Color.Black;
-            cyberTextBox2.Lighting = false;
-            cyberTextBox2.LinearGradientPen = false;
-            cyberTextBox2.Location = new Point(352, 300);
-            cyberTextBox2.Name = "cyberTextBox2";
-            cyberTextBox2.PenWidth = 15;
-            cyberTextBox2.RGB = false;
-            cyberTextBox2.Rounding = true;
-            cyberTextBox2.RoundingInt = 60;
-            cyberTextBox2.Size = new Size(200, 40);
-            cyberTextBox2.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            cyberTextBox2.TabIndex = 2;
-            cyberTextBox2.Tag = "Cyber";
-            cyberTextBox2.TextButton = "";
-            cyberTextBox2.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            cyberTextBox2.Timer_RGB = 300;
+            txtPassword.Alpha = 20;
+            txtPassword.BackColor = Color.Transparent;
+            txtPassword.Background_WidthPen = 3F;
+            txtPassword.BackgroundPen = true;
+            txtPassword.ColorBackground = Color.White;
+            txtPassword.ColorBackground_Pen = Color.Transparent;
+            txtPassword.ColorLighting = Color.Transparent;
+            txtPassword.ColorPen_1 = Color.Transparent;
+            txtPassword.ColorPen_2 = Color.Transparent;
+            txtPassword.CyberTextBoxStyle = ReaLTaiizor.Enum.Cyber.StateStyle.Custom;
+            txtPassword.Font = new Font("Montserrat Light", 10F);
+            txtPassword.ForeColor = Color.Black;
+            txtPassword.Lighting = false;
+            txtPassword.LinearGradientPen = false;
+            txtPassword.Location = new Point(352, 300);
+            txtPassword.Name = "txtPassword";
+            txtPassword.PenWidth = 15;
+            txtPassword.RGB = false;
+            txtPassword.Rounding = true;
+            txtPassword.RoundingInt = 60;
+            txtPassword.Size = new Size(200, 40);
+            txtPassword.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            txtPassword.TabIndex = 2;
+            txtPassword.Tag = "Cyber";
+            txtPassword.TextButton = "";
+            txtPassword.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            txtPassword.Timer_RGB = 300;
             // 
-            // cyberTextBox3
+            // txtTeacherCode
             // 
-            cyberTextBox3.Alpha = 20;
-            cyberTextBox3.BackColor = Color.Transparent;
-            cyberTextBox3.Background_WidthPen = 3F;
-            cyberTextBox3.BackgroundPen = true;
-            cyberTextBox3.ColorBackground = Color.White;
-            cyberTextBox3.ColorBackground_Pen = Color.Transparent;
-            cyberTextBox3.ColorLighting = Color.Transparent;
-            cyberTextBox3.ColorPen_1 = Color.Transparent;
-            cyberTextBox3.ColorPen_2 = Color.Transparent;
-            cyberTextBox3.CyberTextBoxStyle = ReaLTaiizor.Enum.Cyber.StateStyle.Custom;
-            cyberTextBox3.Font = new Font("Montserrat Light", 10F);
-            cyberTextBox3.ForeColor = Color.Black;
-            cyberTextBox3.Lighting = false;
-            cyberTextBox3.LinearGradientPen = false;
-            cyberTextBox3.Location = new Point(352, 378);
-            cyberTextBox3.Name = "cyberTextBox3";
-            cyberTextBox3.PenWidth = 15;
-            cyberTextBox3.RGB = false;
-            cyberTextBox3.Rounding = true;
-            cyberTextBox3.RoundingInt = 60;
-            cyberTextBox3.Size = new Size(200, 40);
-            cyberTextBox3.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            cyberTextBox3.TabIndex = 3;
-            cyberTextBox3.Tag = "Cyber";
-            cyberTextBox3.TextButton = "";
-            cyberTextBox3.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            cyberTextBox3.Timer_RGB = 300;
+            txtTeacherCode.Alpha = 20;
+            txtTeacherCode.BackColor = Color.Transparent;
+            txtTeacherCode.Background_WidthPen = 3F;
+            txtTeacherCode.BackgroundPen = true;
+            txtTeacherCode.ColorBackground = Color.White;
+            txtTeacherCode.ColorBackground_Pen = Color.Transparent;
+            txtTeacherCode.ColorLighting = Color.Transparent;
+            txtTeacherCode.ColorPen_1 = Color.Transparent;
+            txtTeacherCode.ColorPen_2 = Color.Transparent;
+            txtTeacherCode.CyberTextBoxStyle = ReaLTaiizor.Enum.Cyber.StateStyle.Custom;
+            txtTeacherCode.Font = new Font("Montserrat Light", 10F);
+            txtTeacherCode.ForeColor = Color.Black;
+            txtTeacherCode.Lighting = false;
+            txtTeacherCode.LinearGradientPen = false;
+            txtTeacherCode.Location = new Point(352, 378);
+            txtTeacherCode.Name = "txtTeacherCode";
+            txtTeacherCode.PenWidth = 15;
+            txtTeacherCode.RGB = false;
+            txtTeacherCode.Rounding = true;
+            txtTeacherCode.RoundingInt = 60;
+            txtTeacherCode.Size = new Size(200, 40);
+            txtTeacherCode.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            txtTeacherCode.TabIndex = 3;
+            txtTeacherCode.Tag = "Cyber";
+            txtTeacherCode.TextButton = "";
+            txtTeacherCode.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            txtTeacherCode.Timer_RGB = 300;
             // 
-            // button1
+            // btnLogin
             // 
-            button1.BackColor = Color.Transparent;
-            button1.BackgroundImage = (Image)resources.GetObject("button1.BackgroundImage");
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(377, 431);
-            button1.Name = "button1";
-            button1.Size = new Size(148, 47);
-            button1.TabIndex = 4;
-            button1.Text = "LOG IN";
-            button1.TextImageRelation = TextImageRelation.TextAboveImage;
-            button1.UseVisualStyleBackColor = false;
+            btnLogin.BackColor = Color.Transparent;
+            btnLogin.BackgroundImage = (Image)resources.GetObject("btnLogin.BackgroundImage");
+            btnLogin.FlatAppearance.BorderSize = 0;
+            btnLogin.FlatStyle = FlatStyle.Flat;
+            btnLogin.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnLogin.ForeColor = Color.White;
+            btnLogin.Location = new Point(377, 431);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new Size(148, 47);
+            btnLogin.TabIndex = 4;
+            btnLogin.Text = "LOG IN";
+            btnLogin.TextImageRelation = TextImageRelation.TextAboveImage;
+            btnLogin.UseVisualStyleBackColor = false;
             // 
-            // button3
+            // btnBack
             // 
-            button3.BackColor = Color.Transparent;
-            button3.BackgroundImage = Properties.Resources.BACK_BUTTON;
-            button3.FlatAppearance.BorderSize = 0;
-            button3.FlatStyle = FlatStyle.Flat;
-            button3.Location = new Point(44, 425);
-            button3.Name = "button3";
-            button3.Size = new Size(40, 41);
-            button3.TabIndex = 36;
-            button3.UseVisualStyleBackColor = false;
+            btnBack.BackColor = Color.Transparent;
+            btnBack.BackgroundImage = Properties.Resources.BACK_BUTTON;
+            btnBack.FlatAppearance.BorderSize = 0;
+            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.Location = new Point(44, 425);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(40, 41);
+            btnBack.TabIndex = 36;
+            btnBack.UseVisualStyleBackColor = false;
             // 
-            // Form1
+            // TeacherLoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(884, 501);
-            Controls.Add(button3);
-            Controls.Add(button1);
-            Controls.Add(cyberTextBox3);
-            Controls.Add(cyberTextBox2);
-            Controls.Add(cyberTextBox1);
+            Controls.Add(btnBack);
+            Controls.Add(btnLogin);
+            Controls.Add(txtTeacherCode);
+            Controls.Add(txtPassword);
+            Controls.Add(txtIdentity);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "Form1";
+            Name = "TeacherLoginForm";
             Text = "BUCS Student Information System";
             ResumeLayout(false);
         }
 
         #endregion
 
-        private ReaLTaiizor.Controls.CyberTextBox cyberTextBox1;
-        private ReaLTaiizor.Controls.CyberTextBox cyberTextBox2;
-        private ReaLTaiizor.Controls.CyberTextBox cyberTextBox3;
-        private Button button1;
-        private Button button3;
+        private ReaLTaiizor.Controls.CyberTextBox txtIdentity;
+        private ReaLTaiizor.Controls.CyberTextBox txtPassword;
+        private ReaLTaiizor.Controls.CyberTextBox txtTeacherCode;
+        private Button btnLogin;
+        private Button btnBack;
     }
 }
