@@ -6,7 +6,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Mail;
-using System.Text;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using BUCS_SIS;
@@ -31,7 +30,7 @@ namespace BUCS_SIS
             FormClosed += ProfileForm_Closed;
         }
 
-        // Use after successful student login.
+        // Use this constructor after successful student login.
         public StudentProfileUpdateForm(int authenticatedAccountId)
             : this()
         {
@@ -70,7 +69,8 @@ namespace BUCS_SIS
                 $"'{name}' must be a {typeof(T).Name} control.");
         }
 
-        // Finds the standard TextBox inside a CyberTextBox.
+        // Supports standard TextBox controls and CyberTextBox controls
+        // that contain a standard TextBox.
         private static TextBox? FindInnerTextBox(Control control)
         {
             if (control is TextBox textBox)
@@ -147,7 +147,6 @@ namespace BUCS_SIS
         private void ConfigureControls()
         {
             Text = "Student Information";
-            StartPosition = FormStartPosition.CenterParent;
 
             GetEditor("txtStudentId").MaxLength = 50;
             GetEditor("txtFirstName").MaxLength = 100;
@@ -195,12 +194,22 @@ namespace BUCS_SIS
             clear.Text = "Clear Fields";
             view.Text = "View Your Profile";
             back.Text = "Back";
-            upload.Text = "Upload 2×2 Picture";
+            upload.Text = "Upload 2x2 Picture";
 
+            // Remove and reconnect our handlers to avoid duplicates.
+            save.Click -= SaveStudent;
             save.Click += SaveStudent;
+
+            clear.Click -= ClearFields;
             clear.Click += ClearFields;
+
+            view.Click -= ViewProfile;
             view.Click += ViewProfile;
+
+            back.Click -= BackToPrevious;
             back.Click += BackToPrevious;
+
+            upload.Click -= UploadPhoto;
             upload.Click += UploadPhoto;
 
             AcceptButton = save;
@@ -296,14 +305,19 @@ namespace BUCS_SIS
                 Gender.SelectedItem =
                     reader["gender"].ToString();
 
-                DateTime birth =
-                    Convert.ToDateTime(reader["date_of_birth"]);
+                BirthDate.Checked = false;
 
-                if (birth >= BirthDate.MinDate &&
-                    birth <= BirthDate.MaxDate)
+                if (reader["date_of_birth"] != DBNull.Value)
                 {
-                    BirthDate.Value = birth;
-                    BirthDate.Checked = true;
+                    DateTime birth =
+                        Convert.ToDateTime(reader["date_of_birth"]);
+
+                    if (birth >= BirthDate.MinDate &&
+                        birth <= BirthDate.MaxDate)
+                    {
+                        BirthDate.Value = birth;
+                        BirthDate.Checked = true;
+                    }
                 }
 
                 photoBytes =
@@ -319,7 +333,8 @@ namespace BUCS_SIS
                 {
                     ShowError(
                         "Your information was loaded, but the saved " +
-                        "picture could not be displayed. Upload a replacement.");
+                        "picture could not be displayed. " +
+                        "Upload a replacement picture.");
                 }
             }
             catch (MySqlException ex)
@@ -358,6 +373,7 @@ namespace BUCS_SIS
 
             if (!MailAddress.TryCreate(
                     email, out MailAddress? address) ||
+                address == null ||
                 !string.Equals(
                     address.Address,
                     email,
@@ -371,7 +387,9 @@ namespace BUCS_SIS
             if (EnrollmentStatus.SelectedIndex < 0 ||
                 Gender.SelectedIndex < 0)
             {
-                ShowError("Select your enrollment status and gender.");
+                ShowError(
+                    "Select your enrollment status and gender.");
+
                 return false;
             }
 
@@ -388,7 +406,13 @@ namespace BUCS_SIS
 
         private void SaveStudent(object? sender, EventArgs e)
         {
-            if (accountId <= 0 || !ValidateInputs())
+            if (accountId <= 0)
+            {
+                ShowError("Please log in before saving.");
+                return;
+            }
+
+            if (!ValidateInputs())
             {
                 return;
             }
@@ -415,7 +439,9 @@ namespace BUCS_SIS
 
                     if (check.ExecuteScalar() == null)
                     {
-                        ShowError("The student account no longer exists.");
+                        ShowError(
+                            "The student account no longer exists.");
+
                         return;
                     }
                 }
@@ -433,16 +459,20 @@ namespace BUCS_SIS
                     command.Parameters.AddWithValue("@id", accountId);
 
                     command.Parameters.AddWithValue(
-                        "@studentId", ReadInput("txtStudentId"));
+                        "@studentId",
+                        ReadInput("txtStudentId"));
 
                     command.Parameters.AddWithValue(
-                        "@firstName", ReadInput("txtFirstName"));
+                        "@firstName",
+                        ReadInput("txtFirstName"));
 
                     command.Parameters.AddWithValue(
-                        "@lastName", ReadInput("txtLastName"));
+                        "@lastName",
+                        ReadInput("txtLastName"));
 
                     command.Parameters.AddWithValue(
-                        "@email", ReadInput("txtEmail"));
+                        "@email",
+                        ReadInput("txtEmail"));
 
                     command.ExecuteNonQuery();
                 }
@@ -562,7 +592,8 @@ namespace BUCS_SIS
             BirthDate.Value = DateTime.Today;
             BirthDate.Checked = false;
 
-            // Preserve the photo. This does not delete saved information.
+            // Preserve the photo.
+            // Saved database information remains unchanged.
             GetEditor("txtStudentId").Focus();
         }
 
@@ -585,7 +616,9 @@ namespace BUCS_SIS
                 if (new FileInfo(dialog.FileName).Length >
                     5 * 1024 * 1024)
                 {
-                    ShowError("Select an image smaller than 5 MB.");
+                    ShowError(
+                        "Select an image smaller than 5 MB.");
+
                     return;
                 }
 
@@ -593,10 +626,13 @@ namespace BUCS_SIS
                     Image.FromFile(dialog.FileName);
 
                 using Bitmap square = new Bitmap(600, 600);
+
+                // Square image with 2x2-inch print dimensions at 300 DPI.
                 square.SetResolution(300, 300);
 
                 int side = Math.Min(
-                    original.Width, original.Height);
+                    original.Width,
+                    original.Height);
 
                 using (Graphics graphics =
                     Graphics.FromImage(square))
@@ -628,7 +664,8 @@ namespace BUCS_SIS
                 ex is UnauthorizedAccessException)
             {
                 ShowError(
-                    "Unable to open this picture. Select a valid JPG or PNG.");
+                    "Unable to open this picture. " +
+                    "Select a valid JPG or PNG.");
             }
         }
 
@@ -663,11 +700,18 @@ namespace BUCS_SIS
             previous?.Dispose();
         }
 
+        // Opens the separate PROFILE form.
         private void ViewProfile(object? sender, EventArgs e)
         {
-            string details;
-            byte[]? savedPhoto;
+            if (accountId <= 0)
+            {
+                ShowError(
+                    "Please log in before viewing your profile.");
 
+                return;
+            }
+
+            // Check that a saved profile exists before navigating.
             try
             {
                 using var connection =
@@ -676,152 +720,52 @@ namespace BUCS_SIS
                 connection.Open();
 
                 using var command = new MySqlCommand(@"
-                    SELECT
-                        a.student_id,
-                        a.first_name,
-                        p.middle_name,
-                        a.last_name,
-                        a.email,
-                        p.year_block_program,
-                        p.enrollment_status,
-                        p.date_of_birth,
-                        p.gender,
-                        p.contact_number,
-                        p.profile_picture
-                    FROM student_accounts a
-                    INNER JOIN student_profiles p
-                        ON p.account_id = a.account_id
-                    WHERE a.account_id = @id;",
+                    SELECT account_id
+                    FROM student_profiles
+                    WHERE account_id = @id
+                    LIMIT 1;",
                     connection);
 
                 command.Parameters.AddWithValue("@id", accountId);
 
-                using var reader = command.ExecuteReader();
-
-                if (!reader.Read())
+                if (command.ExecuteScalar() == null)
                 {
                     MessageBox.Show(
-                        this, "Save your student information first.");
+                        this,
+                        "Please click Save Student before " +
+                        "viewing your profile.",
+                        "Save Your Information",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
                     return;
                 }
-
-                StringBuilder text = new StringBuilder();
-
-                text.AppendLine(
-                    $"Student ID: {reader["student_id"]}");
-                text.AppendLine(
-                    $"First Name: {reader["first_name"]}");
-                text.AppendLine(
-                    $"Middle Name: {reader["middle_name"]}");
-                text.AppendLine(
-                    $"Last Name: {reader["last_name"]}");
-                text.AppendLine(
-                    $"Email: {reader["email"]}");
-                text.AppendLine(
-                    $"Year, Block & Program: {reader["year_block_program"]}");
-                text.AppendLine(
-                    $"Enrollment Status: {reader["enrollment_status"]}");
-                text.AppendLine(
-                    $"Date of Birth: " +
-                    $"{Convert.ToDateTime(reader["date_of_birth"]):MMMM dd, yyyy}");
-                text.AppendLine(
-                    $"Gender: {reader["gender"]}");
-                text.AppendLine(
-                    $"Contact Number: {reader["contact_number"]}");
-
-                details = text.ToString();
-
-                savedPhoto =
-                    reader["profile_picture"] == DBNull.Value
-                        ? null
-                        : (byte[])reader["profile_picture"];
             }
             catch (MySqlException ex)
             {
                 ShowError(
-                    "Unable to load your saved profile.\n\n" + ex.Message);
+                    "Unable to check your saved profile.\n\n" +
+                    ex.Message);
+
                 return;
             }
 
-            try
+            using (PROFILE profileForm = new PROFILE(accountId))
             {
-                ShowProfileWindow(details, savedPhoto);
+                profileForm.StartPosition =
+                    FormStartPosition.CenterParent;
+
+                Hide();
+
+                try
+                {
+                    profileForm.ShowDialog(this);
+                }
+                finally
+                {
+                    Show();
+                }
             }
-            catch (Exception ex) when (IsImageError(ex))
-            {
-                ShowError(
-                    "The saved picture could not be displayed. " +
-                    "Upload a replacement and save again.");
-            }
-        }
-
-        private void ShowProfileWindow(
-            string details,
-            byte[]? savedPhoto)
-        {
-            using Image? image = DecodePhoto(savedPhoto);
-
-            using Form window = new Form
-            {
-                Text = "Your Student Profile",
-                ClientSize = new Size(650, 650),
-                MinimumSize = new Size(500, 500),
-                StartPosition = FormStartPosition.CenterParent,
-                BackColor = Color.White
-            };
-
-            TableLayoutPanel layout = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 1,
-                RowCount = 3,
-                Padding = new Padding(20)
-            };
-
-            layout.ColumnStyles.Add(
-                new ColumnStyle(SizeType.Percent, 100));
-
-            layout.RowStyles.Add(
-                new RowStyle(SizeType.Absolute, 180));
-            layout.RowStyles.Add(
-                new RowStyle(SizeType.Percent, 100));
-            layout.RowStyles.Add(
-                new RowStyle(SizeType.Absolute, 45));
-
-            PictureBox picture = new PictureBox
-            {
-                Dock = DockStyle.Fill,
-                SizeMode = PictureBoxSizeMode.Zoom,
-                Image = image
-            };
-
-            TextBox profileText = new TextBox
-            {
-                Dock = DockStyle.Fill,
-                Multiline = true,
-                ReadOnly = true,
-                ScrollBars = ScrollBars.Vertical,
-                Font = new Font("Segoe UI", 11F),
-                BackColor = Color.White,
-                Text = details
-            };
-
-            Button back = new Button
-            {
-                Text = "Back",
-                Dock = DockStyle.Fill
-            };
-
-            back.Click += (sender, e) => window.Close();
-
-            layout.Controls.Add(picture, 0, 0);
-            layout.Controls.Add(profileText, 0, 1);
-            layout.Controls.Add(back, 0, 2);
-
-            window.Controls.Add(layout);
-            window.CancelButton = back;
-
-            window.ShowDialog(this);
         }
 
         private void BackToPrevious(object? sender, EventArgs e)
