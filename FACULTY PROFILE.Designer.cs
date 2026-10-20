@@ -86,7 +86,7 @@
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20.4702625F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 79.52974F));
-            tableLayoutPanel1.Location = new Point(31, 134);
+            tableLayoutPanel1.Location = new Point(31, 159);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 16;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -105,8 +105,8 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(726, 350);
-            tableLayoutPanel1.TabIndex = 33;
+            tableLayoutPanel1.Size = new Size(726, 325);
+            tableLayoutPanel1.TabIndex = 30;
             // 
             // button1
             // 
