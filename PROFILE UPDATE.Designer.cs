@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form4));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StudentProfileUpdateForm));
             txtStudentId = new ReaLTaiizor.Controls.CyberTextBox();
             txtFirstName = new ReaLTaiizor.Controls.CyberTextBox();
             txtMiddleName = new ReaLTaiizor.Controls.CyberTextBox();
