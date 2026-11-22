@@ -13,7 +13,7 @@ namespace BUCS_SIS
     {
         private readonly string connectionString =
             "server=localhost;port=3306;database=student_db;" +
-            "uid=root;password=@Bok15518;charset=utf8mb4;";
+            "uid=root;password=tunasandwich;charset=utf8mb4;";
 
         private const int PasswordIterations = 600000;
 
@@ -359,6 +359,11 @@ namespace BUCS_SIS
             {
                 e.Cancel = true;
             }
+        }
+
+        private void SignUpForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

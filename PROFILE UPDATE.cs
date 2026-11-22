@@ -19,7 +19,7 @@ namespace BUCS_SIS
 
         private readonly string connectionString =
             "server=localhost;port=3306;database=student_db;" +
-            "uid=root;password=@Bok15518;charset=utf8mb4;";
+            "uid=root;password=tunasandwich;charset=utf8mb4;";
 
         // Required by the Visual Studio Designer.
         public StudentProfileUpdateForm()
@@ -797,6 +797,11 @@ namespace BUCS_SIS
                 "Student Profile",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
+        }
+
+        private void StudentProfileUpdateForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

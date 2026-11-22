@@ -15,7 +15,7 @@ namespace BUCS_SIS
 
         private readonly string connectionString =
             "server=localhost;port=3306;database=student_db;" +
-            "uid=root;password=@Bok15518;charset=utf8mb4;";
+            "uid=root;password=tunasandwich;charset=utf8mb4;";
 
         // Required by the Visual Studio Designer.
         public PROFILE()
@@ -296,6 +296,11 @@ namespace BUCS_SIS
             Image? previous = picStudent.Image;
             picStudent.Image = null;
             previous?.Dispose();
+        }
+
+        private void PROFILE_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

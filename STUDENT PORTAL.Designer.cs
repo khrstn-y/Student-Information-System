@@ -21,110 +21,75 @@ namespace BUCS_SIS
 
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources =
-                new System.ComponentModel.ComponentResourceManager(
-                    typeof(StudentLoginForm));
-
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StudentLoginForm));
             txtIdentity = new TextBox();
             txtPassword = new TextBox();
             btnLogin = new Button();
             btnSignUp = new Button();
             btnBack = new Button();
-
             SuspendLayout();
-
             // 
             // txtIdentity
             // 
             txtIdentity.BackColor = Color.White;
             txtIdentity.BorderStyle = BorderStyle.FixedSingle;
-            txtIdentity.Font = new Font(
-                "Montserrat Light",
-                10F,
-                FontStyle.Regular,
-                GraphicsUnit.Point);
-
+            txtIdentity.Font = new Font("Montserrat Light", 10F);
             txtIdentity.ForeColor = Color.Black;
             txtIdentity.Location = new Point(346, 251);
             txtIdentity.Name = "txtIdentity";
-            txtIdentity.Size = new Size(200, 30);
+            txtIdentity.Size = new Size(200, 24);
             txtIdentity.TabIndex = 0;
-
             // 
             // txtPassword
             // 
             txtPassword.BackColor = Color.White;
             txtPassword.BorderStyle = BorderStyle.FixedSingle;
-            txtPassword.Font = new Font(
-                "Montserrat Light",
-                10F,
-                FontStyle.Regular,
-                GraphicsUnit.Point);
-
+            txtPassword.Font = new Font("Montserrat Light", 10F);
             txtPassword.ForeColor = Color.Black;
             txtPassword.Location = new Point(346, 340);
             txtPassword.Name = "txtPassword";
-            txtPassword.Size = new Size(200, 30);
+            txtPassword.Size = new Size(200, 24);
             txtPassword.TabIndex = 1;
             txtPassword.UseSystemPasswordChar = true;
-
             // 
             // btnLogin
             // 
             btnLogin.BackColor = Color.Transparent;
-            btnLogin.BackgroundImage =
-                (Image?)resources.GetObject("btnLogin.BackgroundImage");
-
+            btnLogin.BackgroundImage = (Image)resources.GetObject("btnLogin.BackgroundImage");
             btnLogin.FlatAppearance.BorderSize = 0;
             btnLogin.FlatStyle = FlatStyle.Flat;
-            btnLogin.Font = new Font(
-                "Montserrat ExtraBold",
-                12F,
-                FontStyle.Bold,
-                GraphicsUnit.Point);
-
+            btnLogin.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold);
             btnLogin.ForeColor = Color.White;
             btnLogin.Location = new Point(271, 406);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(148, 47);
             btnLogin.TabIndex = 2;
             btnLogin.Text = "LOG IN";
-            btnLogin.TextImageRelation =
-                TextImageRelation.TextAboveImage;
-
+            btnLogin.TextImageRelation = TextImageRelation.TextAboveImage;
             btnLogin.UseVisualStyleBackColor = false;
-
             // 
             // btnSignUp
             // 
             btnSignUp.BackColor = Color.Transparent;
-            btnSignUp.BackgroundImage =
-                (Image?)resources.GetObject("btnSignUp.BackgroundImage");
-
+            btnSignUp.BackgroundImage = (Image)resources.GetObject("btnSignUp.BackgroundImage");
             btnSignUp.FlatAppearance.BorderSize = 0;
             btnSignUp.FlatStyle = FlatStyle.Flat;
-            btnSignUp.Font = new Font(
-                "Montserrat ExtraBold",
-                12F,
-                FontStyle.Bold,
-                GraphicsUnit.Point);
-
+            btnSignUp.Font = new Font("Montserrat ExtraBold", 12F, FontStyle.Bold);
             btnSignUp.ForeColor = Color.White;
             btnSignUp.Location = new Point(466, 406);
             btnSignUp.Name = "btnSignUp";
             btnSignUp.Size = new Size(148, 47);
             btnSignUp.TabIndex = 3;
             btnSignUp.Text = "SIGN UP";
-            btnSignUp.TextImageRelation =
-                TextImageRelation.TextAboveImage;
-
+            btnSignUp.TextImageRelation = TextImageRelation.TextAboveImage;
             btnSignUp.UseVisualStyleBackColor = false;
-
             // 
             // btnBack
             // 
+            btnBack.AccessibleName = "Back";
             btnBack.BackColor = Color.Transparent;
             btnBack.BackgroundImage = Properties.Resources.BACK_BUTTON;
+            btnBack.CausesValidation = false;
             btnBack.FlatAppearance.BorderSize = 0;
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Location = new Point(44, 425);
@@ -132,34 +97,25 @@ namespace BUCS_SIS
             btnBack.Size = new Size(38, 41);
             btnBack.TabIndex = 4;
             btnBack.UseVisualStyleBackColor = false;
-            btnBack.CausesValidation = false;
-            btnBack.AccessibleName = "Back";
-
             // 
             // StudentLoginForm
             // 
             AcceptButton = btnLogin;
-            CancelButton = btnBack;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-
-            BackgroundImage =
-                (Image?)resources.GetObject("$this.BackgroundImage");
-
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+            CancelButton = btnBack;
             ClientSize = new Size(884, 501);
-
             Controls.Add(btnBack);
             Controls.Add(btnSignUp);
             Controls.Add(btnLogin);
             Controls.Add(txtPassword);
             Controls.Add(txtIdentity);
-
-            Icon = (Icon?)resources.GetObject("$this.Icon");
-
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "StudentLoginForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "BUCS Student Information System";
-
+            Load += StudentLoginForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }

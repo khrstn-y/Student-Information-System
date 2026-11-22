@@ -18,7 +18,7 @@ namespace BUCS_SIS
 
         private readonly string connectionString =
             "server=localhost;port=3306;database=student_db;" +
-            "uid=root;password=@Bok15518;charset=utf8mb4;";
+            "uid=root;password=tunasandwich;charset=utf8mb4;";
 
         private readonly DataTable roster = new DataTable();
 
@@ -1089,6 +1089,26 @@ namespace BUCS_SIS
                 "Faculty Profile",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Warning);
+        }
+
+        private void FacultyProfileForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDrop_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
