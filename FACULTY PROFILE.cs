@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
+using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
+using ScottPlot.WinForms;
 
 namespace BUCS_SIS
 {
@@ -17,38 +18,28 @@ namespace BUCS_SIS
         private readonly int teacherAccountId;
 
         private readonly string connectionString =
-            "server=localhost;port=3306;database=student_db;" +
-            "uid=root;password=@Bok15518;charset=utf8mb4;";
+            Environment.GetEnvironmentVariable("BUCS_SIS_CONNECTION_STRING")
+            ?? "server=localhost;port=3306;database=student_db;user id=root;password=@Bok15518;";
 
         private readonly DataTable roster = new DataTable();
 
-        private readonly Dictionary<string, RosterChange> pending =
-            new Dictionary<string, RosterChange>(
-                StringComparer.OrdinalIgnoreCase);
+        // IDs that were displayed when the roster was loaded.
+        private readonly HashSet<int> originalStudents =
+            new HashSet<int>();
 
         private int cohortId;
+        private string cohortName = "";
+        private readonly double[] savedEnrollmentCounts = new double[3];
+        private bool hasChanges;
         private bool loaded;
-        private bool suppressSelection;
+        private bool changingRosterFilter;
 
-        private sealed class RosterChange
-        {
-            public string StudentId { get; set; } = "";
-            public string FullName { get; set; } = "";
-            public string Status { get; set; } = "Regular";
-            public bool Included { get; set; }
-        }
-
-        // Required by the Visual Studio Designer.
         public FacultyProfileForm()
         {
             InitializeComponent();
-
-            ConfigureUploadButton();
         }
 
-        // Open this constructor after successful teacher login.
-        public FacultyProfileForm(int authenticatedTeacherId)
-            : this()
+        public FacultyProfileForm(int authenticatedTeacherId) : this()
         {
             if (authenticatedTeacherId <= 0)
             {
@@ -59,52 +50,14 @@ namespace BUCS_SIS
             teacherAccountId = authenticatedTeacherId;
         }
 
-        private void ConfigureUploadButton()
-        {
-            // Reuse an existing button if one was added in the Designer.
-            Control[] matches = Controls.Find("btnUploadPhoto", true);
-
-            Button upload;
-
-            if (matches.Length == 1 && matches[0] is Button existing)
-            {
-                upload = existing;
-            }
-            else if (matches.Length == 0)
-            {
-                upload = new Button
-                {
-                    Name = "btnUploadPhoto",
-                    Size = new Size(105, 42),
-                    Location = new Point(
-                        picProfessor.Right + 8,
-                        picProfessor.Top + 28),
-                    BackColor = Color.White,
-                    ForeColor = Color.Black,
-                    FlatStyle = FlatStyle.Flat,
-                    UseVisualStyleBackColor = false
-                };
-
-                Controls.Add(upload);
-            }
-            else
-            {
-                throw new InvalidOperationException(
-                    "Use only one Button named btnUploadPhoto.");
-            }
-
-            upload.Text = "Upload Picture";
-            upload.Click -= UploadProfessorPhoto;
-            upload.Click += UploadProfessorPhoto;
-            upload.BringToFront();
-        }
-
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
 
             if (loaded)
+            {
                 return;
+            }
 
             loaded = true;
 
@@ -115,20 +68,23 @@ namespace BUCS_SIS
                 return;
             }
 
+            ConfigureControls();
+
             try
             {
-                ConfigureControls();
                 LoadFaculty();
                 LoadRoster();
             }
-            catch (Exception ex) when (
-                ex is MySqlException ||
-                ex is InvalidOperationException)
+            catch (MySqlException ex)
             {
-                ShowError(
-                    "Unable to load faculty information.\n\n" +
+                ShowError("Unable to load faculty information.\n\n" +
                     ex.Message);
 
+                Close();
+            }
+            catch (InvalidOperationException ex)
+            {
+                ShowError(ex.Message);
                 Close();
             }
         }
@@ -140,33 +96,28 @@ namespace BUCS_SIS
             picProfessor.SizeMode = PictureBoxSizeMode.Zoom;
 
             txtStudentId.MaxLength = 50;
-            txtStudentId.PlaceholderText = "Student ID...";
-
-            txtName.ReadOnly = false;
-            txtName.TabStop = true;
-            txtName.MaxLength = 300;
-            txtName.BackColor = Color.White;
-            txtName.PlaceholderText = "Full name for a new student...";
+            txtName.ReadOnly = true;
 
             cmbStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbStatus.Items.Clear();
-            cmbStatus.Items.AddRange(
-                new object[] { "Regular", "Irregular", "LOA" });
-
+            cmbStatus.Items.AddRange(new object[]
+            {
+                "Regular", "Irregular", "LOA"
+            });
             cmbStatus.SelectedIndex = 0;
 
             btnAdd.Text = "Add Student";
             btnDrop.Text = "Drop Student";
             btnSave.Text = "Save Changes";
+            btnBack.Text = "Back";
 
-            roster.CaseSensitive = false;
+            roster.Columns.Add("AccountId", typeof(int));
             roster.Columns.Add("StudentId", typeof(string));
             roster.Columns.Add("Status", typeof(string));
             roster.Columns.Add("StudentName", typeof(string));
-
             roster.PrimaryKey = new[]
             {
-                roster.Columns["StudentId"]!
+                roster.Columns["AccountId"]!
             };
 
             tablepanel.AutoGenerateColumns = false;
@@ -177,8 +128,7 @@ namespace BUCS_SIS
                 Name = "colStudentId",
                 HeaderText = "Student ID",
                 DataPropertyName = "StudentId",
-                FillWeight = 27,
-                SortMode = DataGridViewColumnSortMode.NotSortable
+                FillWeight = 27
             });
 
             tablepanel.Columns.Add(new DataGridViewTextBoxColumn
@@ -186,8 +136,7 @@ namespace BUCS_SIS
                 Name = "colStatus",
                 HeaderText = "Enrollment Status",
                 DataPropertyName = "Status",
-                FillWeight = 25,
-                SortMode = DataGridViewColumnSortMode.NotSortable
+                FillWeight = 25
             });
 
             tablepanel.Columns.Add(new DataGridViewTextBoxColumn
@@ -195,10 +144,19 @@ namespace BUCS_SIS
                 Name = "colStudentName",
                 HeaderText = "Student Name",
                 DataPropertyName = "StudentName",
-                FillWeight = 48,
-                SortMode = DataGridViewColumnSortMode.NotSortable
+                FillWeight = 48
             });
 
+            roster.CaseSensitive = false;
+            tablepanel.DataSource = roster.DefaultView;
+            roster.DefaultView.ListChanged += (_, _) => UpdateRosterCount();
+            txtSearchStudent.TextChanged += FilterRoster;
+            btnClearSearch.Click += (_, _) =>
+            {
+                txtSearchStudent.Clear();
+                txtSearchStudent.Focus();
+            };
+            UpdateRosterCount();
             tablepanel.ReadOnly = true;
             tablepanel.AllowUserToAddRows = false;
             tablepanel.AllowUserToDeleteRows = false;
@@ -218,87 +176,181 @@ namespace BUCS_SIS
             tablepanel.ColumnHeadersHeightSizeMode =
                 DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 
-            tablepanel.Font = new Font("Segoe UI", 10F);
+            tablepanel.EnableHeadersVisualStyles = false;
+            tablepanel.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(49, 49, 103);
+            tablepanel.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            tablepanel.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+                tablepanel.ColumnHeadersDefaultCellStyle.BackColor;
+            tablepanel.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
+            tablepanel.ColumnHeadersDefaultCellStyle.Padding = new Padding(9, 0, 0, 0);
+            tablepanel.DefaultCellStyle.Padding = new Padding(9, 0, 0, 0);
+            tablepanel.DefaultCellStyle.SelectionBackColor = Color.FromArgb(211, 221, 250);
+            tablepanel.DefaultCellStyle.SelectionForeColor = Color.FromArgb(24, 25, 63);
+            tablepanel.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(241, 243, 252);
             tablepanel.DefaultCellStyle.ForeColor = Color.Black;
             tablepanel.DefaultCellStyle.BackColor = Color.White;
             tablepanel.DefaultCellStyle.WrapMode =
                 DataGridViewTriState.False;
 
+            // Space for 15 data rows at the current display scaling.
             int rowHeight = (int)Math.Round(28 * DeviceDpi / 96.0);
             int headerHeight = (int)Math.Round(34 * DeviceDpi / 96.0);
 
             tablepanel.RowTemplate.Height = rowHeight;
             tablepanel.ColumnHeadersHeight = headerHeight;
-            tablepanel.Height = headerHeight + 15 * rowHeight + 2;
+            // Fixed columns, with vertical scrolling for larger rosters.
             tablepanel.ScrollBars = ScrollBars.Vertical;
 
-            tablepanel.DataSource = roster;
+            foreach (DataGridViewColumn column in tablepanel.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
 
             btnAdd.Click += AddStudent;
             btnDrop.Click += DropStudent;
             btnSave.Click += SaveChanges;
-            btnBack.Click += BackToPrevious;
+            btnEnrollmentChart.Click += ShowEnrollmentChart;
+            btnBack.Click += (sender, e) => Close();
 
             tablepanel.SelectionChanged += RosterSelectionChanged;
 
             CancelButton = btnBack;
         }
 
-        private void LoadFaculty()
+        protected override void OnPaintBackground(PaintEventArgs e)
         {
-            using var connection =
-                new MySqlConnection(connectionString);
+            Rectangle area = ClientRectangle;
+            if (area.Width <= 0 || area.Height <= 0)
+                return;
 
-            connection.Open();
+            using var background = new LinearGradientBrush(
+                area,
+                Color.FromArgb(20, 20, 69),
+                Color.FromArgb(54, 53, 103),
+                LinearGradientMode.ForwardDiagonal);
+            e.Graphics.FillRectangle(background, e.ClipRectangle);
 
-            using var command = new MySqlCommand(@"
-                SELECT
-                    f.full_name,
-                    t.email,
-                    f.profile_picture,
-                    c.cohort_id,
-                    c.year_block_program
-                FROM teacher_accounts t
-                INNER JOIN faculty_profiles f
-                    ON f.account_id = t.account_id
-                INNER JOIN faculty_cohorts c
-                    ON c.cohort_id = f.cohort_id
-                WHERE t.account_id = @teacher
-                  AND t.is_active = TRUE;",
-                connection);
-
-            command.Parameters.AddWithValue(
-                "@teacher", teacherAccountId);
-
-            using var reader = command.ExecuteReader();
-
-            if (!reader.Read())
+            if (facultyBackdrop is Image artwork)
             {
-                throw new InvalidOperationException(
-                    "The professor is inactive or has no assigned cohort.");
+                int sourceWidth = Math.Max(1, artwork.Width * 13 / 100);
+                int stripWidth = Math.Min(area.Width, (int)Math.Round(112 * DeviceDpi / 96.0));
+                var source = new Rectangle(artwork.Width - sourceWidth, 0, sourceWidth, artwork.Height);
+                var strip = new Rectangle(area.Right - stripWidth, 0, stripWidth, area.Height);
+                e.Graphics.DrawImage(artwork, strip, source, GraphicsUnit.Pixel);
+            }
+        }
+
+        private void FilterRoster(object? sender, EventArgs e)
+        {
+            string search = txtSearchStudent.Text.Trim();
+            changingRosterFilter = true;
+
+            try
+            {
+                string pattern = EscapeSearchText(search);
+                roster.DefaultView.RowFilter = search.Length == 0
+                    ? string.Empty
+                    : $"[StudentId] LIKE '%{pattern}%' OR [StudentName] LIKE '%{pattern}%'";
+                tablepanel.CurrentCell = null;
+                tablepanel.ClearSelection();
+                txtStudentId.Clear();
+                txtName.Clear();
+            }
+            finally
+            {
+                changingRosterFilter = false;
             }
 
-            cohortId = Convert.ToInt32(reader["cohort_id"]);
+            UpdateRosterCount();
+        }
 
-            DisplayValue(
-                pnlName,
-                reader["full_name"].ToString(),
-                18F);
+        private static string EscapeSearchText(string search)
+        {
+            var escaped = new StringBuilder();
+            foreach (char character in search)
+            {
+                switch (character)
+                {
+                    case '\'':
+                        escaped.Append("''");
+                        break;
+                    case '[':
+                    case ']':
+                    case '%':
+                    case '*':
+                        escaped.Append('[').Append(character).Append(']');
+                        break;
+                    default:
+                        escaped.Append(character);
+                        break;
+                }
+            }
 
-            DisplayValue(
-                pnlEmail,
-                reader["email"].ToString(),
-                11F);
+            return escaped.ToString();
+        }
 
-            DisplayValue(
-                pnlBlock,
-                reader["year_block_program"].ToString(),
-                12F);
+        private void UpdateRosterCount()
+        {
+            int shown = roster.DefaultView.Count;
+            lblSearchCount.Text = string.IsNullOrEmpty(roster.DefaultView.RowFilter)
+                ? $"{shown} {(shown == 1 ? "student" : "students")}"
+                : shown == 0
+                    ? "No matching students"
+                    : $"{shown} of {roster.Rows.Count} students";
+        }
 
-            byte[]? photo =
-                reader["profile_picture"] == DBNull.Value
+        private void LoadFaculty()
+        {
+            byte[]? photo;
+
+            using (var connection =
+                new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using var command = new MySqlCommand(@"
+                    SELECT
+                        f.full_name,
+                        t.email,
+                        f.profile_picture,
+                        c.cohort_id,
+                        c.year_block_program
+                    FROM teacher_accounts t
+                    INNER JOIN faculty_profiles f
+                        ON f.account_id = t.account_id
+                    INNER JOIN faculty_cohorts c
+                        ON c.cohort_id = f.cohort_id
+                    WHERE t.account_id = @id
+                      AND t.is_active = TRUE;",
+                    connection);
+
+                command.Parameters.AddWithValue(
+                    "@id", teacherAccountId);
+
+                using var reader = command.ExecuteReader();
+
+                if (!reader.Read())
+                {
+                    throw new InvalidOperationException(
+                        "This professor has no assigned faculty profile " +
+                        "or cohort, or the account is inactive.");
+                }
+
+                cohortId = Convert.ToInt32(reader["cohort_id"]);
+
+                DisplayValue(
+                    pnlName, reader["full_name"].ToString(), 18F);
+
+                DisplayValue(
+                    pnlEmail, reader["email"].ToString(), 11F);
+
+                cohortName = reader.GetString(reader.GetOrdinal("year_block_program"));
+                DisplayValue(pnlBlock, cohortName, 12F);
+
+                photo = reader["profile_picture"] == DBNull.Value
                     ? null
                     : (byte[])reader["profile_picture"];
+            }
 
             SetProfessorPhoto(photo);
         }
@@ -310,110 +362,78 @@ namespace BUCS_SIS
 
             connection.Open();
 
-            // Registered account names take priority over manual names.
-            // Matching Student IDs appear only once.
+            // Include automatically matched students unless dropped.
+            // Also include students explicitly added to this cohort.
             using var command = new MySqlCommand(@"
                 SELECT
+                    a.account_id,
                     a.student_id,
                     COALESCE(
                         o.enrollment_status,
-                        m.enrollment_status,
                         p.enrollment_status
                     ) AS enrollment_status,
-                    CONCAT(
-                        a.last_name, ', ', a.first_name,
-                        CASE
-                            WHEN p.middle_name IS NULL
-                                 OR p.middle_name = ''
-                            THEN ''
-                            ELSE CONCAT(' ', p.middle_name)
-                        END
+                    CONCAT_WS(
+                        ' ',
+                        a.last_name,
+                        CONCAT(
+                            a.first_name,
+                            IF(
+                                p.middle_name IS NULL
+                                OR p.middle_name = '',
+                                '',
+                                CONCAT(' ', p.middle_name)
+                            )
+                        )
                     ) AS student_name
                 FROM student_accounts a
-                CROSS JOIN faculty_cohorts c
-                LEFT JOIN student_profiles p
+                INNER JOIN student_profiles p
                     ON p.account_id = a.account_id
+                INNER JOIN faculty_cohorts c
+                    ON c.cohort_id = @cohort
                 LEFT JOIN faculty_roster_overrides o
                     ON o.cohort_id = c.cohort_id
                    AND o.student_account_id = a.account_id
-                LEFT JOIN faculty_manual_students m
-                    ON m.cohort_id = c.cohort_id
-                   AND m.student_id = a.student_id
-                WHERE c.cohort_id = @cohort
-                  AND (
-                      o.is_included = TRUE
-                      OR (
-                          o.student_account_id IS NULL
-                          AND (
-                              m.is_included = TRUE
-                              OR (
-                                  m.student_id IS NULL
-                                  AND p.year_block_program =
-                                      c.year_block_program
-                              )
-                          )
-                      )
-                  )
-
-                UNION ALL
-
-                SELECT
-                    m.student_id,
-                    m.enrollment_status,
-                    m.full_name AS student_name
-                FROM faculty_manual_students m
-                WHERE m.cohort_id = @cohort
-                  AND m.is_included = TRUE
-                  AND NOT EXISTS (
-                      SELECT 1
-                      FROM student_accounts a
-                      WHERE a.student_id = m.student_id
-                  )
-                ORDER BY student_name, student_id;",
+                WHERE
+                    o.is_included = TRUE
+                    OR (
+                        o.student_account_id IS NULL
+                        AND p.year_block_program = c.year_block_program
+                    )
+                ORDER BY a.last_name, a.first_name, a.student_id;",
                 connection);
 
             command.Parameters.AddWithValue("@cohort", cohortId);
 
-            DataTable incoming = roster.Clone();
+            roster.Clear();
+            originalStudents.Clear();
 
-            using (var reader = command.ExecuteReader())
+            using var reader = command.ExecuteReader();
+
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    incoming.Rows.Add(
-                        reader["student_id"].ToString(),
-                        reader["enrollment_status"].ToString(),
-                        reader["student_name"].ToString());
-                }
+                int id = Convert.ToInt32(reader["account_id"]);
+
+                roster.Rows.Add(
+                    id,
+                    reader["student_id"].ToString(),
+                    reader["enrollment_status"].ToString(),
+                    reader["student_name"].ToString());
+
+                originalStudents.Add(id);
             }
 
-            suppressSelection = true;
-
-            try
-            {
-                roster.Clear();
-
-                foreach (DataRow row in incoming.Rows)
-                {
-                    roster.ImportRow(row);
-                }
-
-                pending.Clear();
-                ResetInputs();
-            }
-            finally
-            {
-                suppressSelection = false;
-            }
+            CaptureSavedEnrollmentCounts();
+            hasChanges = false;
+            tablepanel.ClearSelection();
+            txtStudentId.Clear();
+            txtName.Clear();
         }
 
         private void AddStudent(object? sender, EventArgs e)
         {
             string studentId = txtStudentId.Text.Trim();
-            string fullName = txtName.Text.Trim();
-            string status = cmbStatus.SelectedItem?.ToString() ?? "";
 
-            if (studentId.Length == 0 || status.Length == 0)
+            if (studentId.Length == 0 || cmbStatus.SelectedIndex < 0)
             {
                 ShowError("Enter a Student ID and select a status.");
                 return;
@@ -421,95 +441,74 @@ namespace BUCS_SIS
 
             try
             {
-                using var connection =
-                    new MySqlConnection(connectionString);
+                int id;
+                string fullName;
+                string databaseStudentId;
 
-                connection.Open();
-
-                // Retrieve the official name if an account exists.
-                using var command = new MySqlCommand(@"
-                    SELECT
-                        a.student_id,
-                        CONCAT(
-                            a.last_name, ', ', a.first_name,
-                            CASE
-                                WHEN p.middle_name IS NULL
-                                     OR p.middle_name = ''
-                                THEN ''
-                                ELSE CONCAT(' ', p.middle_name)
-                            END
-                        ) AS student_name
-                    FROM student_accounts a
-                    LEFT JOIN student_profiles p
-                        ON p.account_id = a.account_id
-                    WHERE a.student_id = @studentId;",
-                    connection);
-
-                command.Parameters.AddWithValue(
-                    "@studentId", studentId);
-
-                using (var reader = command.ExecuteReader())
+                using (var connection =
+                    new MySqlConnection(connectionString))
                 {
-                    if (reader.Read())
+                    connection.Open();
+
+                    using var command = new MySqlCommand(@"
+                        SELECT
+                            a.account_id,
+                            a.student_id,
+                            CONCAT_WS(
+                                ' ',
+                                a.last_name,
+                                a.first_name,
+                                NULLIF(p.middle_name, '')
+                            ) AS student_name
+                        FROM student_accounts a
+                        INNER JOIN student_profiles p
+                            ON p.account_id = a.account_id
+                        WHERE a.student_id = @studentId
+                        LIMIT 1;",
+                        connection);
+
+                    command.Parameters.AddWithValue(
+                        "@studentId", studentId);
+
+                    using var reader = command.ExecuteReader();
+
+                    if (!reader.Read())
                     {
-                        studentId =
-                            reader["student_id"].ToString() ?? studentId;
-
-                        fullName =
-                            reader["student_name"].ToString() ?? "";
-                    }
-                }
-
-                if (string.IsNullOrWhiteSpace(fullName))
-                {
-                    ShowError(
-                        "This Student ID has no account yet. " +
-                        "Type the student's full name, then click Add Student.");
-
-                    txtName.Focus();
-                    return;
-                }
-
-                suppressSelection = true;
-
-                try
-                {
-                    DataRow? existing = roster.Rows.Find(studentId);
-
-                    if (existing == null)
-                    {
-                        roster.Rows.Add(
-                            studentId,
-                            status,
-                            fullName);
-                    }
-                    else
-                    {
-                        existing["Status"] = status;
-                        existing["StudentName"] = fullName;
+                        ShowError(
+                            "Student not found. The student must register " +
+                            "and save their information first.");
+                        return;
                     }
 
-                    pending[studentId] = new RosterChange
-                    {
-                        StudentId = studentId,
-                        FullName = fullName,
-                        Status = status,
-                        Included = true
-                    };
-
-                    ResetInputs();
+                    id = Convert.ToInt32(reader["account_id"]);
+                    databaseStudentId =
+                        reader["student_id"].ToString() ?? "";
+                    fullName =
+                        reader["student_name"].ToString() ?? "";
                 }
-                finally
+
+                txtName.Text = fullName;
+
+                DataRow? existing = roster.Rows.Find(id);
+                string status = cmbStatus.SelectedItem!.ToString()!;
+
+                if (existing != null)
                 {
-                    suppressSelection = false;
+                    existing["Status"] = status;
+                    existing["StudentId"] = databaseStudentId;
+                    existing["StudentName"] = fullName;
+                }
+                else
+                {
+                    roster.Rows.Add(
+                        id, databaseStudentId, status, fullName);
                 }
 
-                txtStudentId.Focus();
+                hasChanges = true;
             }
             catch (MySqlException ex)
             {
-                ShowError(
-                    "Unable to add the student.\n\n" + ex.Message);
+                ShowError("Unable to find the student.\n\n" + ex.Message);
             }
         }
 
@@ -520,7 +519,17 @@ namespace BUCS_SIS
 
             if (studentId.Length > 0)
             {
-                target = roster.Rows.Find(studentId);
+                foreach (DataRow row in roster.Rows)
+                {
+                    if (string.Equals(
+                        row["StudentId"].ToString(),
+                        studentId,
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        target = row;
+                        break;
+                    }
+                }
             }
             else if (tablepanel.CurrentRow?.DataBoundItem
                 is DataRowView selected)
@@ -530,45 +539,23 @@ namespace BUCS_SIS
 
             if (target == null)
             {
-                ShowError(
-                    "Enter a listed Student ID or select a student.");
-
+                ShowError("Enter a listed Student ID or select a student.");
                 return;
             }
 
-            studentId = target["StudentId"].ToString()!;
+            roster.Rows.Remove(target);
+            hasChanges = true;
 
-            var change = new RosterChange
-            {
-                StudentId = studentId,
-                FullName = target["StudentName"].ToString() ?? "",
-                Status = target["Status"].ToString() ?? "Regular",
-                Included = false
-            };
-
-            suppressSelection = true;
-
-            try
-            {
-                roster.Rows.Remove(target);
-                pending[studentId] = change;
-                ResetInputs();
-            }
-            finally
-            {
-                suppressSelection = false;
-            }
+            txtStudentId.Clear();
+            txtName.Clear();
+            tablepanel.ClearSelection();
         }
 
         private void RosterSelectionChanged(
-            object? sender,
-            EventArgs e)
+            object? sender, EventArgs e)
         {
-            if (suppressSelection)
-                return;
-
-            if (tablepanel.CurrentRow?.DataBoundItem
-                is not DataRowView selected)
+            if (changingRosterFilter ||
+                tablepanel.CurrentRow is not { Selected: true, DataBoundItem: DataRowView selected })
             {
                 return;
             }
@@ -578,24 +565,11 @@ namespace BUCS_SIS
             cmbStatus.SelectedItem = selected["Status"].ToString();
         }
 
-        private void ResetInputs()
-        {
-            tablepanel.ClearSelection();
-            tablepanel.CurrentCell = null;
-
-            txtStudentId.Clear();
-            txtName.Clear();
-            cmbStatus.SelectedIndex = 0;
-        }
-
         private void SaveChanges(object? sender, EventArgs e)
         {
-            if (pending.Count == 0)
+            if (!hasChanges)
             {
-                MessageBox.Show(
-                    this,
-                    "There are no changes to save.");
-
+                MessageBox.Show(this, "There are no changes to save.");
                 return;
             }
 
@@ -606,9 +580,9 @@ namespace BUCS_SIS
 
                 connection.Open();
 
-                using var transaction =
-                    connection.BeginTransaction();
+                using var transaction = connection.BeginTransaction();
 
+                // Recheck the authenticated teacher's assignment.
                 using (var check = new MySqlCommand(@"
                     SELECT f.cohort_id
                     FROM faculty_profiles f
@@ -617,8 +591,7 @@ namespace BUCS_SIS
                     WHERE f.account_id = @teacher
                       AND t.is_active = TRUE
                     FOR UPDATE;",
-                    connection,
-                    transaction))
+                    connection, transaction))
                 {
                     check.Parameters.AddWithValue(
                         "@teacher", teacherAccountId);
@@ -629,367 +602,161 @@ namespace BUCS_SIS
                         Convert.ToInt32(assigned) != cohortId)
                     {
                         throw new InvalidOperationException(
-                            "Your cohort assignment changed or your " +
-                            "account is inactive. Reopen the faculty portal.");
+                            "Your cohort assignment has changed. " +
+                            "Reopen the faculty profile.");
                     }
                 }
 
-                using (var cohortLock = new MySqlCommand(@"
-                    SELECT cohort_id
-                    FROM faculty_cohorts
-                    WHERE cohort_id = @cohort
-                    FOR UPDATE;",
-                    connection,
-                    transaction))
-                {
-                    cohortLock.Parameters.AddWithValue(
-                        "@cohort", cohortId);
+                HashSet<int> current = new HashSet<int>();
 
-                    if (cohortLock.ExecuteScalar() == null)
-                    {
-                        throw new InvalidOperationException(
-                            "The assigned cohort no longer exists.");
-                    }
-                }
-
-                foreach (RosterChange change in pending.Values)
+                foreach (DataRow row in roster.Rows)
                 {
-                    SaveRosterChange(
+                    int id = Convert.ToInt32(row["AccountId"]);
+                    current.Add(id);
+
+                    SaveOverride(
                         connection,
                         transaction,
-                        change);
+                        id,
+                        true,
+                        row["Status"].ToString()!);
+                }
+
+                foreach (int id in originalStudents)
+                {
+                    if (!current.Contains(id))
+                    {
+                        SaveOverride(
+                            connection,
+                            transaction,
+                            id,
+                            false,
+                            "Regular");
+                    }
                 }
 
                 transaction.Commit();
-                pending.Clear();
-            }
-            catch (Exception ex) when (
-                ex is MySqlException ||
-                ex is InvalidOperationException)
-            {
-                ShowError(
-                    "Changes were not saved.\n\n" + ex.Message);
+                CaptureSavedEnrollmentCounts();
 
-                return;
-            }
+                originalStudents.Clear();
 
-            MessageBox.Show(
-                this,
-                "Student roster changes have been saved.",
-                "Saved",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+                foreach (int id in current)
+                {
+                    originalStudents.Add(id);
+                }
 
-            try
-            {
-                LoadRoster();
+                hasChanges = false;
+
+                MessageBox.Show(
+                    this,
+                    "Roster changes have been saved.",
+                    "Saved",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
             catch (MySqlException ex)
             {
-                ShowError(
-                    "Changes were saved, but the roster could not " +
-                    "be refreshed. Reopen this window.\n\n" +
-                    ex.Message);
+                ShowError("Unable to save the roster.\n\n" + ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                ShowError(ex.Message);
             }
         }
 
-        private void SaveRosterChange(
-            MySqlConnection connection,
-            MySqlTransaction transaction,
-            RosterChange change)
+        private void CaptureSavedEnrollmentCounts()
         {
-            int? studentAccountId = null;
+            Array.Clear(savedEnrollmentCounts, 0, savedEnrollmentCounts.Length);
 
-            // Recheck because the student may have signed up
-            // after the professor clicked Add Student.
-            using (var lookup = new MySqlCommand(@"
-                SELECT account_id
-                FROM student_accounts
-                WHERE student_id = @studentId
-                FOR UPDATE;",
-                connection,
-                transaction))
+            foreach (DataRow row in roster.Rows)
             {
-                lookup.Parameters.AddWithValue(
-                    "@studentId", change.StudentId);
-
-                object? result = lookup.ExecuteScalar();
-
-                if (result != null && result != DBNull.Value)
+                switch (row["Status"] as string)
                 {
-                    studentAccountId = Convert.ToInt32(result);
+                    case "Regular":
+                        savedEnrollmentCounts[0]++;
+                        break;
+                    case "Irregular":
+                        savedEnrollmentCounts[1]++;
+                        break;
+                    case "LOA":
+                        savedEnrollmentCounts[2]++;
+                        break;
                 }
             }
-
-            if (studentAccountId.HasValue)
-            {
-                using var command = new MySqlCommand(@"
-                    INSERT INTO faculty_roster_overrides
-                    (
-                        cohort_id,
-                        student_account_id,
-                        is_included,
-                        enrollment_status
-                    )
-                    VALUES (@cohort, @account, @included, @status)
-                    ON DUPLICATE KEY UPDATE
-                        is_included = @included,
-                        enrollment_status = @status;",
-                    connection,
-                    transaction);
-
-                command.Parameters.AddWithValue(
-                    "@cohort", cohortId);
-
-                command.Parameters.AddWithValue(
-                    "@account", studentAccountId.Value);
-
-                command.Parameters.AddWithValue(
-                    "@included", change.Included);
-
-                command.Parameters.AddWithValue(
-                    "@status", change.Status);
-
-                command.ExecuteNonQuery();
-
-                using var updateManual = new MySqlCommand(@"
-                    UPDATE faculty_manual_students
-                    SET is_included = @included,
-                        enrollment_status = @status
-                    WHERE cohort_id = @cohort
-                      AND student_id = @studentId;",
-                    connection,
-                    transaction);
-
-                updateManual.Parameters.AddWithValue(
-                    "@cohort", cohortId);
-
-                updateManual.Parameters.AddWithValue(
-                    "@studentId", change.StudentId);
-
-                updateManual.Parameters.AddWithValue(
-                    "@included", change.Included);
-
-                updateManual.Parameters.AddWithValue(
-                    "@status", change.Status);
-
-                updateManual.ExecuteNonQuery();
-            }
-            else
-            {
-                // A manual student record does not create a login account.
-                using var command = new MySqlCommand(@"
-                    INSERT INTO faculty_manual_students
-                    (
-                        cohort_id,
-                        student_id,
-                        full_name,
-                        enrollment_status,
-                        is_included
-                    )
-                    VALUES
-                    (
-                        @cohort,
-                        @studentId,
-                        @name,
-                        @status,
-                        @included
-                    )
-                    ON DUPLICATE KEY UPDATE
-                        full_name = @name,
-                        enrollment_status = @status,
-                        is_included = @included;",
-                    connection,
-                    transaction);
-
-                command.Parameters.AddWithValue(
-                    "@cohort", cohortId);
-
-                command.Parameters.AddWithValue(
-                    "@studentId", change.StudentId);
-
-                command.Parameters.AddWithValue(
-                    "@name", change.FullName);
-
-                command.Parameters.AddWithValue(
-                    "@status", change.Status);
-
-                command.Parameters.AddWithValue(
-                    "@included", change.Included);
-
-                command.ExecuteNonQuery();
-            }
         }
 
-        private void UploadProfessorPhoto(
-            object? sender,
-            EventArgs e)
+        private void ShowEnrollmentChart(object? sender, EventArgs e)
         {
-            if (teacherAccountId <= 0)
+            using var chartWindow = new Form
             {
-                ShowError("Please log in first.");
-                return;
-            }
-
-            using OpenFileDialog dialog = new OpenFileDialog
-            {
-                Title = "Select Professor Picture",
-                Filter = "Image Files|*.jpg;*.jpeg;*.png",
-                Multiselect = false
+                Text = "Enrollment Chart",
+                StartPosition = FormStartPosition.CenterParent,
+                ClientSize = new Size(800, 450),
+                MinimumSize = new Size(520, 340)
             };
 
-            if (dialog.ShowDialog(this) != DialogResult.OK)
-                return;
-
-            byte[] pictureBytes;
-            Bitmap? preview = null;
-
-            try
+            var chart = new FormsPlot { Dock = DockStyle.Fill };
+            double[] positions = { 0, 1, 2 };
+            ScottPlot.Tick[] labels =
             {
-                const long maximumSize = 5 * 1024 * 1024;
+                new ScottPlot.Tick(0, "Regular"),
+                new ScottPlot.Tick(1, "Irregular"),
+                new ScottPlot.Tick(2, "LOA")
+            };
 
-                if (new FileInfo(dialog.FileName).Length > maximumSize)
-                {
-                    ShowError(
-                        "Choose a picture no larger than 5 MB.");
+            var plot = chart.Plot;
+            plot.Add.Bars(positions, savedEnrollmentCounts);
+            plot.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(labels);
 
-                    return;
-                }
+            double highestCount = Math.Max(
+                savedEnrollmentCounts[0],
+                Math.Max(savedEnrollmentCounts[1], savedEnrollmentCounts[2]));
+            plot.Axes.SetLimits(-0.6, 2.6, 0, Math.Max(1, Math.Ceiling(highestCount * 1.15)));
+            plot.Title(cohortName);
+            plot.YLabel("Number of Students");
 
-                using (Image original =
-                    Image.FromFile(dialog.FileName))
-                using (Bitmap square = new Bitmap(600, 600))
-                {
-                    // 600 pixels at 300 DPI = 2 inches.
-                    square.SetResolution(300, 300);
-
-                    int side = Math.Min(
-                        original.Width,
-                        original.Height);
-
-                    Rectangle source = new Rectangle(
-                        (original.Width - side) / 2,
-                        (original.Height - side) / 2,
-                        side,
-                        side);
-
-                    using (Graphics graphics =
-                        Graphics.FromImage(square))
-                    {
-                        graphics.Clear(Color.White);
-
-                        graphics.InterpolationMode =
-                            InterpolationMode.HighQualityBicubic;
-
-                        graphics.DrawImage(
-                            original,
-                            new Rectangle(0, 0, 600, 600),
-                            source,
-                            GraphicsUnit.Pixel);
-                    }
-
-                    using MemoryStream stream = new MemoryStream();
-
-                    square.Save(stream, ImageFormat.Jpeg);
-                    pictureBytes = stream.ToArray();
-
-                    preview = new Bitmap(square);
-                }
-            }
-            catch (Exception ex) when (IsPictureError(ex))
+            var summary = new Label
             {
-                preview?.Dispose();
+                Dock = DockStyle.Top,
+                Height = 36,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = $"Saved roster — Regular: {savedEnrollmentCounts[0]}   " +
+                       $"Irregular: {savedEnrollmentCounts[1]}   LOA: {savedEnrollmentCounts[2]}"
+            };
 
-                ShowError(
-                    "Unable to open this picture. " +
-                    "Choose a valid JPG or PNG.");
-
-                return;
-            }
-
-            try
-            {
-                using var connection =
-                    new MySqlConnection(connectionString);
-
-                connection.Open();
-
-                using var transaction =
-                    connection.BeginTransaction();
-
-                using (var check = new MySqlCommand(@"
-                    SELECT f.account_id
-                    FROM faculty_profiles f
-                    INNER JOIN teacher_accounts t
-                        ON t.account_id = f.account_id
-                    WHERE f.account_id = @teacher
-                      AND t.is_active = TRUE
-                    FOR UPDATE;",
-                    connection,
-                    transaction))
-                {
-                    check.Parameters.AddWithValue(
-                        "@teacher", teacherAccountId);
-
-                    if (check.ExecuteScalar() == null)
-                    {
-                        throw new InvalidOperationException(
-                            "Your faculty profile was not found " +
-                            "or your account is inactive.");
-                    }
-                }
-
-                using (var command = new MySqlCommand(@"
-                    UPDATE faculty_profiles
-                    SET profile_picture = @photo
-                    WHERE account_id = @teacher;",
-                    connection,
-                    transaction))
-                {
-                    command.Parameters.AddWithValue(
-                        "@teacher", teacherAccountId);
-
-                    command.Parameters.Add(
-                        "@photo",
-                        MySqlDbType.MediumBlob).Value = pictureBytes;
-
-                    command.ExecuteNonQuery();
-                }
-
-                transaction.Commit();
-            }
-            catch (Exception ex) when (
-                ex is MySqlException ||
-                ex is InvalidOperationException)
-            {
-                preview?.Dispose();
-
-                ShowError(
-                    "Unable to save your picture.\n\n" + ex.Message);
-
-                return;
-            }
-
-            // Display only after the database save succeeds.
-            Image? previous = picProfessor.Image;
-            picProfessor.Image = preview;
-            previous?.Dispose();
-
-            MessageBox.Show(
-                this,
-                "Your profile picture has been saved.",
-                "Picture Updated",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            chartWindow.Controls.Add(chart);
+            chartWindow.Controls.Add(summary);
+            chartWindow.ShowDialog(this);
         }
 
-        private static bool IsPictureError(Exception ex)
+        private void SaveOverride(
+            MySqlConnection connection,
+            MySqlTransaction transaction,
+            int studentAccountId,
+            bool included,
+            string status)
         {
-            return ex is ArgumentException ||
-                   ex is OutOfMemoryException ||
-                   ex is IOException ||
-                   ex is UnauthorizedAccessException ||
-                   ex is System.Runtime.InteropServices.ExternalException;
+            using var command = new MySqlCommand(@"
+                INSERT INTO faculty_roster_overrides
+                (
+                    cohort_id,
+                    student_account_id,
+                    is_included,
+                    enrollment_status
+                )
+                VALUES (@cohort, @student, @included, @status)
+                ON DUPLICATE KEY UPDATE
+                    is_included = @included,
+                    enrollment_status = @status;",
+                connection, transaction);
+
+            command.Parameters.AddWithValue("@cohort", cohortId);
+            command.Parameters.AddWithValue(
+                "@student", studentAccountId);
+            command.Parameters.AddWithValue("@included", included);
+            command.Parameters.AddWithValue("@status", status);
+
+            command.ExecuteNonQuery();
         }
 
         private static void DisplayValue(
@@ -997,14 +764,14 @@ namespace BUCS_SIS
             string? value,
             float fontSize)
         {
-            string labelName = panel.Name + "_Value";
-            Label? label = panel.Controls[labelName] as Label;
+            string name = panel.Name + "_Value";
+            Label? label = panel.Controls[name] as Label;
 
             if (label == null)
             {
                 label = new Label
                 {
-                    Name = labelName,
+                    Name = name,
                     Dock = DockStyle.Fill,
                     AutoSize = false,
                     AutoEllipsis = true,
@@ -1012,13 +779,13 @@ namespace BUCS_SIS
                     TextAlign = ContentAlignment.MiddleLeft,
                     BackColor = Color.Transparent,
                     ForeColor = panel.ForeColor,
-                    Font = new Font("Segoe UI", fontSize),
                     Padding = new Padding(4, 0, 4, 0)
                 };
 
                 panel.Controls.Add(label);
             }
 
+            label.Font = new Font("Segoe UI", fontSize);
             label.Text = value ?? "";
             label.BringToFront();
         }
@@ -1030,7 +797,9 @@ namespace BUCS_SIS
             previous?.Dispose();
 
             if (bytes == null || bytes.Length == 0)
+            {
                 return;
+            }
 
             try
             {
@@ -1039,37 +808,34 @@ namespace BUCS_SIS
 
                 picProfessor.Image = new Bitmap(original);
             }
-            catch (Exception ex) when (IsPictureError(ex))
+            catch (Exception ex) when (
+                ex is ArgumentException ||
+                ex is OutOfMemoryException ||
+                ex is System.Runtime.InteropServices.ExternalException)
             {
                 ShowError(
-                    "The professor's saved picture could not be displayed. " +
-                    "Use Upload Picture to replace it.");
+                    "The professor's saved picture could not be displayed.");
             }
-        }
-
-        private void BackToPrevious(object? sender, EventArgs e)
-        {
-            Close();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            base.OnFormClosing(e);
-
-            if (e.Cancel || pending.Count == 0)
-                return;
-
-            DialogResult answer = MessageBox.Show(
-                this,
-                "Discard your unsaved roster changes?",
-                "Unsaved Changes",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            if (answer != DialogResult.Yes)
+            if (hasChanges)
             {
-                e.Cancel = true;
+                DialogResult answer = MessageBox.Show(
+                    this,
+                    "Discard your unsaved roster changes?",
+                    "Unsaved Changes",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (answer != DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                }
             }
+
+            base.OnFormClosing(e);
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)

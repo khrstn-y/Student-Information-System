@@ -1,5 +1,6 @@
-﻿#nullable disable
+﻿#nullable enable
 
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -7,377 +8,262 @@ namespace BUCS_SIS
 {
     partial class FacultyProfileForm
     {
-        private System.ComponentModel.IContainer components = null;
-
         protected override void Dispose(bool disposing)
         {
-            if (disposing && components != null)
-            {
-                components.Dispose();
-            }
+            if (disposing)
+                roster.Dispose();
 
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources =
-                new System.ComponentModel.ComponentResourceManager(
-                    typeof(FacultyProfileForm));
-
-            picProfessor = new PictureBox();
-            pnlName = new Panel();
-            pnlBlock = new Panel();
-            tablepanel = new DataGridView();
+            var resources = new ComponentResourceManager(typeof(FacultyProfileForm));
             btnBack = new Button();
-            pnlEmail = new Panel();
+            btnBack.Name = "btnBack";
+            btnBack.Location = new Point(24, 17);
+            btnBack.Size = new Size(80, 34);
+            btnBack.Text = "Back";
+            btnBack.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            btnBack.BackColor = Color.FromArgb(47, 47, 97);
+            btnBack.ForeColor = Color.White;
+            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.FlatAppearance.BorderColor = Color.FromArgb(117, 121, 173);
+            btnBack.UseVisualStyleBackColor = false;
+            btnBack.TabIndex = 8;
 
-            btnAdd = new Button();
-            btnDrop = new Button();
-            btnSave = new Button();
-
-            txtName = new TextBox();
-            cmbStatus = new ComboBox();
-            txtStudentId = new TextBox();
-
-            ((System.ComponentModel.ISupportInitialize)picProfessor)
-                .BeginInit();
-
-            ((System.ComponentModel.ISupportInitialize)tablepanel)
-                .BeginInit();
-
-            SuspendLayout();
-
-            //
-            // picProfessor
-            //
-            picProfessor.BackColor = Color.White;
-            picProfessor.BorderStyle = BorderStyle.FixedSingle;
-            picProfessor.Location = new Point(657, 12);
-            picProfessor.Name = "picProfessor";
-            picProfessor.Size = new Size(100, 100);
-            picProfessor.SizeMode = PictureBoxSizeMode.Zoom;
-            picProfessor.TabIndex = 0;
-            picProfessor.TabStop = false;
-
-            //
-            // pnlName
-            //
+            pnlName = new Panel();
+            pnlName.Name = "pnlName";
+            pnlName.Location = new Point(123, 20);
+            pnlName.Size = new Size(450, 36);
+            pnlName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pnlName.ForeColor = Color.White;
             pnlName.BackColor = Color.Transparent;
 
-            pnlName.Font = new Font(
-                "Segoe UI",
-                18F,
-                FontStyle.Bold,
-                GraphicsUnit.Point);
-
-            pnlName.ForeColor = Color.White;
-            pnlName.Location = new Point(238, 28);
-            pnlName.Name = "pnlName";
-            pnlName.Size = new Size(413, 44);
-            pnlName.TabIndex = 1;
-
-            //
-            // pnlEmail
-            //
+            pnlEmail = new Panel();
+            pnlEmail.Name = "pnlEmail";
+            pnlEmail.Location = new Point(123, 61);
+            pnlEmail.Size = new Size(450, 31);
+            pnlEmail.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pnlEmail.ForeColor = Color.FromArgb(221, 225, 247);
             pnlEmail.BackColor = Color.Transparent;
 
-            pnlEmail.Font = new Font(
-                "Segoe UI",
-                11F,
-                FontStyle.Regular,
-                GraphicsUnit.Point);
+            picProfessor = new PictureBox();
+            picProfessor.Name = "picProfessor";
+            picProfessor.Location = new Point(617, 16);
+            picProfessor.Size = new Size(100, 100);
+            picProfessor.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            picProfessor.SizeMode = PictureBoxSizeMode.Zoom;
+            picProfessor.BorderStyle = BorderStyle.FixedSingle;
+            picProfessor.TabStop = false;
 
-            pnlEmail.ForeColor = Color.White;
-            pnlEmail.Location = new Point(238, 78);
-            pnlEmail.Name = "pnlEmail";
-            pnlEmail.Size = new Size(413, 30);
-            pnlEmail.TabIndex = 2;
-
-            //
-            // pnlBlock
-            //
+            pnlBlock = new Panel();
+            pnlBlock.Name = "pnlBlock";
+            pnlBlock.Location = new Point(24, 119);
+            pnlBlock.Size = new Size(693, 31);
+            pnlBlock.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pnlBlock.ForeColor = Color.White;
             pnlBlock.BackColor = Color.Transparent;
 
-            pnlBlock.Font = new Font(
-                "Segoe UI",
-                12F,
-                FontStyle.Bold,
-                GraphicsUnit.Point);
+            lblSearchStudent = new Label();
+            lblSearchStudent.Name = "lblSearchStudent";
+            lblSearchStudent.Location = new Point(24, 158);
+            lblSearchStudent.Size = new Size(140, 21);
+            lblSearchStudent.Text = "Search students";
+            lblSearchStudent.ForeColor = Color.FromArgb(221, 225, 247);
+            lblSearchStudent.BackColor = Color.Transparent;
+            lblSearchStudent.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            lblSearchStudent.TextAlign = ContentAlignment.MiddleLeft;
 
-            pnlBlock.ForeColor = Color.White;
-            pnlBlock.Location = new Point(31, 117);
-            pnlBlock.Name = "pnlBlock";
-            pnlBlock.Size = new Size(726, 30);
-            pnlBlock.TabIndex = 3;
+            txtSearchStudent = new TextBox();
+            txtSearchStudent.Name = "txtSearchStudent";
+            txtSearchStudent.Location = new Point(24, 182);
+            txtSearchStudent.Size = new Size(410, 27);
+            txtSearchStudent.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtSearchStudent.PlaceholderText = "Student ID or name";
+            txtSearchStudent.AccessibleName = "Search students by ID or name";
+            txtSearchStudent.TabIndex = 0;
 
-            //
-            // tablepanel
-            //
-            tablepanel.AllowUserToAddRows = false;
-            tablepanel.AllowUserToDeleteRows = false;
-            tablepanel.AllowUserToResizeRows = false;
+            btnClearSearch = new Button();
+            btnClearSearch.Name = "btnClearSearch";
+            btnClearSearch.Location = new Point(442, 179);
+            btnClearSearch.Size = new Size(73, 31);
+            btnClearSearch.Text = "Clear";
+            btnClearSearch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnClearSearch.BackColor = Color.FromArgb(47, 47, 97);
+            btnClearSearch.ForeColor = Color.White;
+            btnClearSearch.FlatStyle = FlatStyle.Flat;
+            btnClearSearch.FlatAppearance.BorderColor = Color.FromArgb(117, 121, 173);
+            btnClearSearch.UseVisualStyleBackColor = false;
+            btnClearSearch.TabIndex = 1;
 
-            // Columns are created by ConfigureControls()
-            // in FACULTY PROFILE.cs.
-            tablepanel.AutoGenerateColumns = false;
+            lblSearchCount = new Label();
+            lblSearchCount.Name = "lblSearchCount";
+            lblSearchCount.Location = new Point(521, 181);
+            lblSearchCount.Size = new Size(196, 27);
+            lblSearchCount.Text = "";
+            lblSearchCount.ForeColor = Color.FromArgb(221, 225, 247);
+            lblSearchCount.BackColor = Color.Transparent;
+            lblSearchCount.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblSearchCount.TextAlign = ContentAlignment.MiddleRight;
 
-            tablepanel.AutoSizeColumnsMode =
-                DataGridViewAutoSizeColumnsMode.Fill;
-
-            tablepanel.AutoSizeRowsMode =
-                DataGridViewAutoSizeRowsMode.None;
-
-            tablepanel.BackgroundColor = Color.White;
-            tablepanel.BorderStyle = BorderStyle.FixedSingle;
-            tablepanel.ColumnHeadersHeight = 34;
-
-            tablepanel.ColumnHeadersHeightSizeMode =
-                DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-
-            tablepanel.Font = new Font(
-                "Segoe UI",
-                10F,
-                FontStyle.Regular,
-                GraphicsUnit.Point);
-
-            tablepanel.ForeColor = Color.Black;
-            tablepanel.Location = new Point(31, 153);
-            tablepanel.MultiSelect = false;
+            tablepanel = new DataGridView();
             tablepanel.Name = "tablepanel";
-            tablepanel.ReadOnly = true;
-            tablepanel.RowHeadersVisible = false;
-            tablepanel.RowTemplate.Height = 28;
-            tablepanel.ScrollBars = ScrollBars.Vertical;
+            tablepanel.Location = new Point(24, 222);
+            tablepanel.Size = new Size(693, 283);
+            tablepanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            tablepanel.BackgroundColor = Color.FromArgb(234, 237, 248);
+            tablepanel.BorderStyle = BorderStyle.FixedSingle;
+            tablepanel.GridColor = Color.FromArgb(217, 221, 240);
+            tablepanel.TabIndex = 2;
 
-            tablepanel.SelectionMode =
-                DataGridViewSelectionMode.FullRowSelect;
+            lblStudentId = new Label();
+            lblStudentId.Name = "lblStudentId";
+            lblStudentId.Location = new Point(24, 518);
+            lblStudentId.Size = new Size(150, 20);
+            lblStudentId.Text = "Student ID";
+            lblStudentId.ForeColor = Color.FromArgb(221, 225, 247);
+            lblStudentId.BackColor = Color.Transparent;
+            lblStudentId.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblStudentId.TextAlign = ContentAlignment.MiddleLeft;
 
-            // 34-pixel header + 15 rows at 28 pixels + borders.
-            tablepanel.Size = new Size(726, 456);
-            tablepanel.TabIndex = 4;
+            lblStatus = new Label();
+            lblStatus.Name = "lblStatus";
+            lblStatus.Location = new Point(192, 518);
+            lblStatus.Size = new Size(170, 20);
+            lblStatus.Text = "Enrollment status";
+            lblStatus.ForeColor = Color.FromArgb(221, 225, 247);
+            lblStatus.BackColor = Color.Transparent;
+            lblStatus.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblStatus.TextAlign = ContentAlignment.MiddleLeft;
 
-            //
-            // txtStudentId
-            //
-            txtStudentId.Font = new Font(
-                "Montserrat Light",
-                11.25F,
-                FontStyle.Regular,
-                GraphicsUnit.Point);
+            lblStudentName = new Label();
+            lblStudentName.Name = "lblStudentName";
+            lblStudentName.Location = new Point(373, 518);
+            lblStudentName.Size = new Size(200, 20);
+            lblStudentName.Text = "Student name";
+            lblStudentName.ForeColor = Color.FromArgb(221, 225, 247);
+            lblStudentName.BackColor = Color.Transparent;
+            lblStudentName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblStudentName.TextAlign = ContentAlignment.MiddleLeft;
 
-            txtStudentId.ForeColor = Color.Black;
-            txtStudentId.Location = new Point(31, 625);
-            txtStudentId.MaxLength = 50;
+            txtStudentId = new TextBox();
             txtStudentId.Name = "txtStudentId";
-            txtStudentId.PlaceholderText = "Student ID...";
-            txtStudentId.Size = new Size(139, 27);
-            txtStudentId.TabIndex = 5;
+            txtStudentId.Location = new Point(24, 541);
+            txtStudentId.Size = new Size(154, 26);
+            txtStudentId.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            txtStudentId.TabIndex = 3;
 
-            //
-            // cmbStatus
-            //
-            cmbStatus.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbStatus.FlatStyle = FlatStyle.Flat;
-
-            cmbStatus.Font = new Font(
-                "Montserrat Light",
-                9F,
-                FontStyle.Regular,
-                GraphicsUnit.Point);
-
-            cmbStatus.ForeColor = Color.Black;
-            cmbStatus.FormattingEnabled = true;
-
-            // Items are populated by ConfigureControls()
-            // as Regular, Irregular, and LOA.
-            cmbStatus.Location = new Point(180, 625);
+            cmbStatus = new ComboBox();
             cmbStatus.Name = "cmbStatus";
-            cmbStatus.Size = new Size(147, 26);
-            cmbStatus.TabIndex = 6;
+            cmbStatus.Location = new Point(192, 541);
+            cmbStatus.Size = new Size(167, 26);
+            cmbStatus.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            cmbStatus.TabIndex = 4;
 
-            //
-            // txtName
-            //
-            txtName.BackColor = Color.WhiteSmoke;
-
-            txtName.Font = new Font(
-                "Montserrat Light",
-                11.25F,
-                FontStyle.Regular,
-                GraphicsUnit.Point);
-
-            txtName.ForeColor = Color.Black;
-            txtName.Location = new Point(337, 625);
+            txtName = new TextBox();
             txtName.Name = "txtName";
-            txtName.PlaceholderText = "Student name...";
-            txtName.ReadOnly = true;
-            txtName.Size = new Size(420, 27);
-            txtName.TabIndex = 7;
+            txtName.Location = new Point(373, 541);
+            txtName.Size = new Size(344, 26);
+            txtName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             txtName.TabStop = false;
 
-            //
-            // btnAdd
-            //
-            btnAdd.BackColor = Color.Transparent;
-
-            btnAdd.BackgroundImage =
-                (Image)resources.GetObject("btnAdd.BackgroundImage");
-
-            btnAdd.BackgroundImageLayout = ImageLayout.Stretch;
-            btnAdd.FlatAppearance.BorderSize = 0;
-            btnAdd.FlatStyle = FlatStyle.Flat;
-
-            btnAdd.Font = new Font(
-                "Montserrat ExtraBold",
-                9.75F,
-                FontStyle.Bold,
-                GraphicsUnit.Point);
-
-            btnAdd.ForeColor = Color.White;
-            btnAdd.Location = new Point(136, 665);
+            btnAdd = new Button();
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(148, 47);
-            btnAdd.TabIndex = 8;
-            btnAdd.Text = "ADD STUDENT";
-            btnAdd.TextImageRelation = TextImageRelation.TextAboveImage;
+            btnAdd.Location = new Point(24, 582);
+            btnAdd.Size = new Size(134, 37);
+            btnAdd.Text = "Add Student";
+            btnAdd.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnAdd.BackColor = Color.FromArgb(47, 47, 97);
+            btnAdd.ForeColor = Color.White;
+            btnAdd.FlatStyle = FlatStyle.Flat;
+            btnAdd.FlatAppearance.BorderColor = Color.FromArgb(117, 121, 173);
             btnAdd.UseVisualStyleBackColor = false;
+            btnAdd.TabIndex = 5;
 
-            //
-            // btnDrop
-            //
-            btnDrop.BackColor = Color.Transparent;
-
-            btnDrop.BackgroundImage =
-                (Image)resources.GetObject("btnDrop.BackgroundImage");
-
-            btnDrop.BackgroundImageLayout = ImageLayout.Stretch;
-            btnDrop.FlatAppearance.BorderSize = 0;
-            btnDrop.FlatStyle = FlatStyle.Flat;
-
-            btnDrop.Font = new Font(
-                "Montserrat ExtraBold",
-                9.75F,
-                FontStyle.Bold,
-                GraphicsUnit.Point);
-
-            btnDrop.ForeColor = Color.White;
-            btnDrop.Location = new Point(340, 665);
+            btnDrop = new Button();
             btnDrop.Name = "btnDrop";
-            btnDrop.Size = new Size(148, 47);
-            btnDrop.TabIndex = 9;
-            btnDrop.Text = "DROP STUDENT";
-            btnDrop.TextImageRelation = TextImageRelation.TextAboveImage;
+            btnDrop.Location = new Point(169, 582);
+            btnDrop.Size = new Size(134, 37);
+            btnDrop.Text = "Drop Student";
+            btnDrop.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnDrop.BackColor = Color.FromArgb(47, 47, 97);
+            btnDrop.ForeColor = Color.White;
+            btnDrop.FlatStyle = FlatStyle.Flat;
+            btnDrop.FlatAppearance.BorderColor = Color.FromArgb(117, 121, 173);
             btnDrop.UseVisualStyleBackColor = false;
+            btnDrop.TabIndex = 6;
 
-            //
-            // btnSave
-            //
-            btnSave.BackColor = Color.Transparent;
-
-            btnSave.BackgroundImage =
-                (Image)resources.GetObject("btnSave.BackgroundImage");
-
-            btnSave.BackgroundImageLayout = ImageLayout.Stretch;
-            btnSave.FlatAppearance.BorderSize = 0;
-            btnSave.FlatStyle = FlatStyle.Flat;
-
-            btnSave.Font = new Font(
-                "Montserrat ExtraBold",
-                10F,
-                FontStyle.Bold,
-                GraphicsUnit.Point);
-
-            btnSave.ForeColor = Color.White;
-            btnSave.Location = new Point(536, 665);
+            btnSave = new Button();
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(148, 47);
-            btnSave.TabIndex = 10;
-            btnSave.Text = "SAVE CHANGES";
-            btnSave.TextImageRelation = TextImageRelation.TextAboveImage;
+            btnSave.Location = new Point(314, 582);
+            btnSave.Size = new Size(147, 37);
+            btnSave.Text = "Save Changes";
+            btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnSave.BackColor = Color.FromArgb(78, 88, 166);
+            btnSave.ForeColor = Color.White;
+            btnSave.FlatStyle = FlatStyle.Flat;
+            btnSave.FlatAppearance.BorderColor = Color.FromArgb(117, 121, 173);
             btnSave.UseVisualStyleBackColor = false;
+            btnSave.TabIndex = 7;
 
-            //
-            // btnBack
-            //
-            btnBack.BackColor = Color.Transparent;
-            btnBack.BackgroundImage = Properties.Resources.BACK_BUTTON;
-            btnBack.BackgroundImageLayout = ImageLayout.Zoom;
-            btnBack.FlatAppearance.BorderSize = 0;
-            btnBack.FlatStyle = FlatStyle.Flat;
-            btnBack.Location = new Point(21, 12);
-            btnBack.Name = "btnBack";
-            btnBack.Size = new Size(39, 41);
-            btnBack.TabIndex = 11;
-            btnBack.UseVisualStyleBackColor = false;
+            btnEnrollmentChart = new Button();
+            btnEnrollmentChart.Name = "btnEnrollmentChart";
+            btnEnrollmentChart.Location = new Point(472, 582);
+            btnEnrollmentChart.Size = new Size(171, 37);
+            btnEnrollmentChart.Text = "Enrollment Chart";
+            btnEnrollmentChart.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnEnrollmentChart.BackColor = Color.FromArgb(47, 47, 97);
+            btnEnrollmentChart.ForeColor = Color.White;
+            btnEnrollmentChart.FlatStyle = FlatStyle.Flat;
+            btnEnrollmentChart.FlatAppearance.BorderColor = Color.FromArgb(117, 121, 173);
+            btnEnrollmentChart.UseVisualStyleBackColor = false;
+            btnEnrollmentChart.TabIndex = 9;
 
-            //
-            // FacultyProfileForm
-            //
+            SuspendLayout();
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-
-            AutoScroll = true;
-
-            BackColor = Color.FromArgb(25, 30, 110);
-
-            BackgroundImage =
-                (Image)resources.GetObject("$this.BackgroundImage");
-
-            BackgroundImageLayout = ImageLayout.Stretch;
-
-            ClientSize = new Size(884, 731);
-
-            Controls.Add(txtStudentId);
-            Controls.Add(cmbStatus);
-            Controls.Add(txtName);
-
-            Controls.Add(btnSave);
-            Controls.Add(btnDrop);
-            Controls.Add(btnAdd);
-
-            Controls.Add(pnlEmail);
-            Controls.Add(btnBack);
-            Controls.Add(tablepanel);
-            Controls.Add(pnlBlock);
-            Controls.Add(pnlName);
-            Controls.Add(picProfessor);
-
-            Icon = (Icon)resources.GetObject("$this.Icon");
-
-            Name = "FacultyProfileForm";
+            ClientSize = new Size(844, 642);
+            MinimumSize = new Size(800, 560);
+            Font = new Font("Segoe UI", 9F);
+            ResizeRedraw = true;
+            DoubleBuffered = true;
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "BUCS Student Information System - Faculty Profile";
-
-            ((System.ComponentModel.ISupportInitialize)picProfessor)
-                .EndInit();
-
-            ((System.ComponentModel.ISupportInitialize)tablepanel)
-                .EndInit();
-
+            facultyBackdrop = resources.GetObject("$this.BackgroundImage") as Image;
+            Icon = resources.GetObject("$this.Icon") as Icon;
+            Name = "FacultyProfileForm";
+            Text = "FACULTY PROFILE";
+            Controls.AddRange(new Control[]
+            {
+                btnBack, pnlName, pnlEmail, picProfessor, pnlBlock,
+                lblSearchStudent, txtSearchStudent, btnClearSearch, lblSearchCount,
+                tablepanel, lblStudentId, lblStatus, lblStudentName, txtStudentId,
+                cmbStatus, txtName, btnAdd, btnDrop, btnSave, btnEnrollmentChart
+            });
             ResumeLayout(false);
             PerformLayout();
         }
 
-        #endregion
-
-        private PictureBox picProfessor;
-
-        private Panel pnlName;
-        private Panel pnlBlock;
-        private Panel pnlEmail;
-
-        private DataGridView tablepanel;
-
-        private Button btnBack;
-        private Button btnAdd;
-        private Button btnDrop;
-        private Button btnSave;
-
-        private TextBox txtName;
-        private ComboBox cmbStatus;
-        private TextBox txtStudentId;
+        private Image? facultyBackdrop;
+        private Button btnBack = null!;
+        private Panel pnlName = null!;
+        private Panel pnlEmail = null!;
+        private PictureBox picProfessor = null!;
+        private Panel pnlBlock = null!;
+        private Label lblSearchStudent = null!;
+        private TextBox txtSearchStudent = null!;
+        private Button btnClearSearch = null!;
+        private Label lblSearchCount = null!;
+        private DataGridView tablepanel = null!;
+        private Label lblStudentId = null!;
+        private Label lblStatus = null!;
+        private Label lblStudentName = null!;
+        private TextBox txtStudentId = null!;
+        private ComboBox cmbStatus = null!;
+        private TextBox txtName = null!;
+        private Button btnAdd = null!;
+        private Button btnDrop = null!;
+        private Button btnSave = null!;
+        private Button btnEnrollmentChart = null!;
     }
 }
