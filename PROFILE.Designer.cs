@@ -290,6 +290,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "PROFILE";
             Text = "BUCS Student Information System";
+            Load += PROFILE_Load;
             ((System.ComponentModel.ISupportInitialize)picStudent).EndInit();
             pnlEmail.ResumeLayout(false);
             pnlStatus.ResumeLayout(false);

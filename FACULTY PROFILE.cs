@@ -991,5 +991,25 @@ namespace BUCS_SIS
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Warning);
         }
+
+        private void FacultyProfileForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDrop_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

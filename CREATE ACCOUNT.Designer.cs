@@ -174,6 +174,7 @@ namespace BUCS_SIS
             Name = "SignUpForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "BUCS Student Information System";
+            Load += SignUpForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }

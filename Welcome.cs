@@ -44,5 +44,10 @@ namespace BUCS_SIS
                 Show();
             }
         }
+
+        private void Welcome_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

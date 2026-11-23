@@ -168,6 +168,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "TeacherLoginForm";
             Text = "BUCS Student Information System";
+            Load += TeacherLoginForm_Load;
             ResumeLayout(false);
         }
 

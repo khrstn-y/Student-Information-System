@@ -77,6 +77,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Welcome";
             Text = "BUCS Student Information System";
+            Load += Welcome_Load;
             ResumeLayout(false);
         }
 

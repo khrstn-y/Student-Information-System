@@ -354,6 +354,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "StudentProfileUpdateForm";
             Text = "BUCS Student Information System";
+            Load += StudentProfileUpdateForm_Load;
             ((System.ComponentModel.ISupportInitialize)picStudentPhoto).EndInit();
             ResumeLayout(false);
             PerformLayout();
