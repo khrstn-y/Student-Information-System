@@ -30,7 +30,7 @@ namespace BUCS_SIS
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.FlatAppearance.BorderColor = Color.FromArgb(117, 121, 173);
             btnBack.UseVisualStyleBackColor = false;
-            btnBack.TabIndex = 8;
+            btnBack.TabIndex = 13;
 
             pnlName = new Panel();
             pnlName.Name = "pnlName";
@@ -137,15 +137,35 @@ namespace BUCS_SIS
             lblStatus.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblStatus.TextAlign = ContentAlignment.MiddleLeft;
 
-            lblStudentName = new Label();
-            lblStudentName.Name = "lblStudentName";
-            lblStudentName.Location = new Point(373, 518);
-            lblStudentName.Size = new Size(200, 20);
-            lblStudentName.Text = "Student name";
-            lblStudentName.ForeColor = Color.FromArgb(221, 225, 247);
-            lblStudentName.BackColor = Color.Transparent;
-            lblStudentName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            lblStudentName.TextAlign = ContentAlignment.MiddleLeft;
+            lblSurname = new Label();
+            lblSurname.Name = "lblSurname";
+            lblSurname.Location = new Point(373, 518);
+            lblSurname.Size = new Size(104, 20);
+            lblSurname.Text = "Surname";
+            lblSurname.ForeColor = Color.FromArgb(221, 225, 247);
+            lblSurname.BackColor = Color.Transparent;
+            lblSurname.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblSurname.TextAlign = ContentAlignment.MiddleLeft;
+
+            lblFirstName = new Label();
+            lblFirstName.Name = "lblFirstName";
+            lblFirstName.Location = new Point(486, 518);
+            lblFirstName.Size = new Size(104, 20);
+            lblFirstName.Text = "First name";
+            lblFirstName.ForeColor = Color.FromArgb(221, 225, 247);
+            lblFirstName.BackColor = Color.Transparent;
+            lblFirstName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblFirstName.TextAlign = ContentAlignment.MiddleLeft;
+
+            lblMiddleName = new Label();
+            lblMiddleName.Name = "lblMiddleName";
+            lblMiddleName.Location = new Point(599, 518);
+            lblMiddleName.Size = new Size(118, 20);
+            lblMiddleName.Text = "Middle name (optional)";
+            lblMiddleName.ForeColor = Color.FromArgb(221, 225, 247);
+            lblMiddleName.BackColor = Color.Transparent;
+            lblMiddleName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblMiddleName.TextAlign = ContentAlignment.MiddleLeft;
 
             txtStudentId = new TextBox();
             txtStudentId.Name = "txtStudentId";
@@ -161,17 +181,38 @@ namespace BUCS_SIS
             cmbStatus.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             cmbStatus.TabIndex = 4;
 
-            txtName = new TextBox();
-            txtName.Name = "txtName";
-            txtName.Location = new Point(373, 541);
-            txtName.Size = new Size(344, 26);
-            txtName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            txtName.TabStop = false;
+            txtSurname = new TextBox();
+            txtSurname.Name = "txtSurname";
+            txtSurname.Location = new Point(373, 541);
+            txtSurname.Size = new Size(104, 26);
+            txtSurname.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            txtSurname.MaxLength = 300;
+            txtSurname.AccessibleName = "Surname";
+            txtSurname.TabIndex = 5;
+
+            txtFirstName = new TextBox();
+            txtFirstName.Name = "txtFirstName";
+            txtFirstName.Location = new Point(486, 541);
+            txtFirstName.Size = new Size(104, 26);
+            txtFirstName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            txtFirstName.MaxLength = 300;
+            txtFirstName.AccessibleName = "First name";
+            txtFirstName.TabIndex = 6;
+
+            txtMiddleName = new TextBox();
+            txtMiddleName.Name = "txtMiddleName";
+            txtMiddleName.Location = new Point(599, 541);
+            txtMiddleName.Size = new Size(118, 26);
+            txtMiddleName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txtMiddleName.MaxLength = 300;
+            txtMiddleName.AccessibleName = "Middle name (optional)";
+            txtMiddleName.PlaceholderText = "Optional";
+            txtMiddleName.TabIndex = 7;
 
             btnAdd = new Button();
             btnAdd.Name = "btnAdd";
             btnAdd.Location = new Point(24, 582);
-            btnAdd.Size = new Size(134, 37);
+            btnAdd.Size = new Size(119, 37);
             btnAdd.Text = "Add Student";
             btnAdd.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnAdd.BackColor = Color.FromArgb(47, 47, 97);
@@ -179,12 +220,12 @@ namespace BUCS_SIS
             btnAdd.FlatStyle = FlatStyle.Flat;
             btnAdd.FlatAppearance.BorderColor = Color.FromArgb(117, 121, 173);
             btnAdd.UseVisualStyleBackColor = false;
-            btnAdd.TabIndex = 5;
+            btnAdd.TabIndex = 8;
 
             btnDrop = new Button();
             btnDrop.Name = "btnDrop";
-            btnDrop.Location = new Point(169, 582);
-            btnDrop.Size = new Size(134, 37);
+            btnDrop.Location = new Point(153, 582);
+            btnDrop.Size = new Size(119, 37);
             btnDrop.Text = "Drop Student";
             btnDrop.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnDrop.BackColor = Color.FromArgb(47, 47, 97);
@@ -192,12 +233,25 @@ namespace BUCS_SIS
             btnDrop.FlatStyle = FlatStyle.Flat;
             btnDrop.FlatAppearance.BorderColor = Color.FromArgb(117, 121, 173);
             btnDrop.UseVisualStyleBackColor = false;
-            btnDrop.TabIndex = 6;
+            btnDrop.TabIndex = 9;
+
+            btnRestoreStudent = new Button();
+            btnRestoreStudent.Name = "btnRestoreStudent";
+            btnRestoreStudent.Location = new Point(282, 582);
+            btnRestoreStudent.Size = new Size(129, 37);
+            btnRestoreStudent.Text = "Restore Student";
+            btnRestoreStudent.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnRestoreStudent.BackColor = Color.FromArgb(47, 47, 97);
+            btnRestoreStudent.ForeColor = Color.White;
+            btnRestoreStudent.FlatStyle = FlatStyle.Flat;
+            btnRestoreStudent.FlatAppearance.BorderColor = Color.FromArgb(117, 121, 173);
+            btnRestoreStudent.UseVisualStyleBackColor = false;
+            btnRestoreStudent.TabIndex = 10;
 
             btnSave = new Button();
             btnSave.Name = "btnSave";
-            btnSave.Location = new Point(314, 582);
-            btnSave.Size = new Size(147, 37);
+            btnSave.Location = new Point(421, 582);
+            btnSave.Size = new Size(121, 37);
             btnSave.Text = "Save Changes";
             btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnSave.BackColor = Color.FromArgb(78, 88, 166);
@@ -205,12 +259,12 @@ namespace BUCS_SIS
             btnSave.FlatStyle = FlatStyle.Flat;
             btnSave.FlatAppearance.BorderColor = Color.FromArgb(117, 121, 173);
             btnSave.UseVisualStyleBackColor = false;
-            btnSave.TabIndex = 7;
+            btnSave.TabIndex = 11;
 
             btnEnrollmentChart = new Button();
             btnEnrollmentChart.Name = "btnEnrollmentChart";
-            btnEnrollmentChart.Location = new Point(472, 582);
-            btnEnrollmentChart.Size = new Size(171, 37);
+            btnEnrollmentChart.Location = new Point(552, 582);
+            btnEnrollmentChart.Size = new Size(150, 37);
             btnEnrollmentChart.Text = "Enrollment Chart";
             btnEnrollmentChart.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnEnrollmentChart.BackColor = Color.FromArgb(47, 47, 97);
@@ -218,7 +272,7 @@ namespace BUCS_SIS
             btnEnrollmentChart.FlatStyle = FlatStyle.Flat;
             btnEnrollmentChart.FlatAppearance.BorderColor = Color.FromArgb(117, 121, 173);
             btnEnrollmentChart.UseVisualStyleBackColor = false;
-            btnEnrollmentChart.TabIndex = 9;
+            btnEnrollmentChart.TabIndex = 12;
 
             SuspendLayout();
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -237,8 +291,8 @@ namespace BUCS_SIS
             {
                 btnBack, pnlName, pnlEmail, picProfessor, pnlBlock,
                 lblSearchStudent, txtSearchStudent, btnClearSearch, lblSearchCount,
-                tablepanel, lblStudentId, lblStatus, lblStudentName, txtStudentId,
-                cmbStatus, txtName, btnAdd, btnDrop, btnSave, btnEnrollmentChart
+                tablepanel, lblStudentId, lblStatus, lblSurname, lblFirstName, lblMiddleName,
+                txtStudentId, cmbStatus, txtSurname, txtFirstName, txtMiddleName, btnAdd, btnDrop, btnRestoreStudent, btnSave, btnEnrollmentChart
             });
             ResumeLayout(false);
             PerformLayout();
@@ -257,12 +311,17 @@ namespace BUCS_SIS
         private DataGridView tablepanel = null!;
         private Label lblStudentId = null!;
         private Label lblStatus = null!;
-        private Label lblStudentName = null!;
+        private Label lblSurname = null!;
+        private Label lblFirstName = null!;
+        private Label lblMiddleName = null!;
         private TextBox txtStudentId = null!;
         private ComboBox cmbStatus = null!;
-        private TextBox txtName = null!;
+        private TextBox txtSurname = null!;
+        private TextBox txtFirstName = null!;
+        private TextBox txtMiddleName = null!;
         private Button btnAdd = null!;
         private Button btnDrop = null!;
+        private Button btnRestoreStudent = null!;
         private Button btnSave = null!;
         private Button btnEnrollmentChart = null!;
     }

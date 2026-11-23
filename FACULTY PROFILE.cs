@@ -23,9 +23,12 @@ namespace BUCS_SIS
 
         private readonly DataTable roster = new DataTable();
 
-        // IDs that were displayed when the roster was loaded.
-        private readonly HashSet<int> originalStudents =
-            new HashSet<int>();
+        // Snapshot of the full saved roster, including rows hidden by search.
+        private readonly Dictionary<string, (int? AccountId, string Name, string Status)>
+            originalStudents = new(StringComparer.OrdinalIgnoreCase);
+
+        private readonly Dictionary<string, (int? AccountId, string Name, string Status)>
+            pendingDrops = new(StringComparer.OrdinalIgnoreCase);
 
         private int cohortId;
         private string cohortName = "";
@@ -96,7 +99,6 @@ namespace BUCS_SIS
             picProfessor.SizeMode = PictureBoxSizeMode.Zoom;
 
             txtStudentId.MaxLength = 50;
-            txtName.ReadOnly = true;
 
             cmbStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbStatus.Items.Clear();
@@ -115,9 +117,10 @@ namespace BUCS_SIS
             roster.Columns.Add("StudentId", typeof(string));
             roster.Columns.Add("Status", typeof(string));
             roster.Columns.Add("StudentName", typeof(string));
+            roster.CaseSensitive = false;
             roster.PrimaryKey = new[]
             {
-                roster.Columns["AccountId"]!
+                roster.Columns["StudentId"]!
             };
 
             tablepanel.AutoGenerateColumns = false;
@@ -147,7 +150,6 @@ namespace BUCS_SIS
                 FillWeight = 48
             });
 
-            roster.CaseSensitive = false;
             tablepanel.DataSource = roster.DefaultView;
             roster.DefaultView.ListChanged += (_, _) => UpdateRosterCount();
             txtSearchStudent.TextChanged += FilterRoster;
@@ -208,6 +210,7 @@ namespace BUCS_SIS
 
             btnAdd.Click += AddStudent;
             btnDrop.Click += DropStudent;
+            btnRestoreStudent.Click += RestoreStudent;
             btnSave.Click += SaveChanges;
             btnEnrollmentChart.Click += ShowEnrollmentChart;
             btnBack.Click += (sender, e) => Close();
@@ -254,7 +257,7 @@ namespace BUCS_SIS
                 tablepanel.CurrentCell = null;
                 tablepanel.ClearSelection();
                 txtStudentId.Clear();
-                txtName.Clear();
+                ClearStudentNameInputs();
             }
             finally
             {
@@ -355,78 +358,70 @@ namespace BUCS_SIS
             SetProfessorPhoto(photo);
         }
 
-        private void LoadRoster()
+        private MySqlCommand CreateRosterCommand(MySqlConnection connection, bool included)
         {
-            using var connection =
-                new MySqlConnection(connectionString);
-
-            connection.Open();
-
-            // Include automatically matched students unless dropped.
-            // Also include students explicitly added to this cohort.
-            using var command = new MySqlCommand(@"
-                SELECT
-                    a.account_id,
-                    a.student_id,
-                    COALESCE(
-                        o.enrollment_status,
-                        p.enrollment_status
-                    ) AS enrollment_status,
-                    CONCAT_WS(
-                        ' ',
-                        a.last_name,
-                        CONCAT(
-                            a.first_name,
-                            IF(
-                                p.middle_name IS NULL
-                                OR p.middle_name = '',
-                                '',
-                                CONCAT(' ', p.middle_name)
-                            )
-                        )
-                    ) AS student_name
+            // Account overrides take priority over manual entries and cohort matches.
+            var command = new MySqlCommand(@"
+                SELECT a.account_id, a.student_id,
+                       COALESCE(o.enrollment_status, m.enrollment_status,
+                                p.enrollment_status) AS enrollment_status,
+                       CONCAT_WS(' ', a.last_name, a.first_name,
+                                 NULLIF(p.middle_name, '')) AS student_name
                 FROM student_accounts a
-                INNER JOIN student_profiles p
-                    ON p.account_id = a.account_id
-                INNER JOIN faculty_cohorts c
-                    ON c.cohort_id = @cohort
+                INNER JOIN student_profiles p ON p.account_id = a.account_id
+                INNER JOIN faculty_cohorts c ON c.cohort_id = @cohort
                 LEFT JOIN faculty_roster_overrides o
-                    ON o.cohort_id = c.cohort_id
-                   AND o.student_account_id = a.account_id
-                WHERE
-                    o.is_included = TRUE
-                    OR (
-                        o.student_account_id IS NULL
-                        AND p.year_block_program = c.year_block_program
-                    )
-                ORDER BY a.last_name, a.first_name, a.student_id;",
+                    ON o.cohort_id = c.cohort_id AND o.student_account_id = a.account_id
+                LEFT JOIN faculty_manual_students m
+                    ON m.cohort_id = c.cohort_id AND m.student_id = a.student_id
+                WHERE (@included = TRUE AND COALESCE(o.is_included, m.is_included,
+                               p.year_block_program = c.year_block_program) = TRUE)
+                   OR (@included = FALSE AND COALESCE(o.is_included, m.is_included) = FALSE)
+
+                UNION ALL
+
+                SELECT NULL, m.student_id, m.enrollment_status, m.full_name
+                FROM faculty_manual_students m
+                WHERE m.cohort_id = @cohort AND m.is_included = @included
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM student_accounts a
+                      INNER JOIN student_profiles p ON p.account_id = a.account_id
+                      WHERE a.student_id = m.student_id
+                  )
+                ORDER BY student_name, student_id;",
                 connection);
 
             command.Parameters.AddWithValue("@cohort", cohortId);
 
+            command.Parameters.AddWithValue("@included", included);
+            return command;
+        }
+
+        private void LoadRoster()
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+            using var command = CreateRosterCommand(connection, included: true);
+
             roster.Clear();
-            originalStudents.Clear();
 
             using var reader = command.ExecuteReader();
-
             while (reader.Read())
             {
-                int id = Convert.ToInt32(reader["account_id"]);
-
                 roster.Rows.Add(
-                    id,
-                    reader["student_id"].ToString(),
-                    reader["enrollment_status"].ToString(),
-                    reader["student_name"].ToString());
-
-                originalStudents.Add(id);
+                    reader.IsDBNull(0) ? DBNull.Value : (object)reader.GetInt32(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.GetString(3));
             }
 
+            CaptureOriginalStudents();
             CaptureSavedEnrollmentCounts();
             hasChanges = false;
             tablepanel.ClearSelection();
             txtStudentId.Clear();
-            txtName.Clear();
+            ClearStudentNameInputs();
         }
 
         private void AddStudent(object? sender, EventArgs e)
@@ -441,101 +436,89 @@ namespace BUCS_SIS
 
             try
             {
-                int id;
-                string fullName;
-                string databaseStudentId;
+                string surname = txtSurname.Text.Trim();
+                string firstName = txtFirstName.Text.Trim();
+                string middleName = txtMiddleName.Text.Trim();
+                string? fullName = null;
+                string status = cmbStatus.SelectedItem!.ToString()!;
+                int? accountId = null;
 
-                using (var connection =
-                    new MySqlConnection(connectionString))
+                using (var connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-
                     using var command = new MySqlCommand(@"
-                        SELECT
-                            a.account_id,
-                            a.student_id,
-                            CONCAT_WS(
-                                ' ',
-                                a.last_name,
-                                a.first_name,
-                                NULLIF(p.middle_name, '')
-                            ) AS student_name
+                        SELECT a.account_id, a.student_id,
+                               CONCAT_WS(' ', a.last_name, a.first_name,
+                                         NULLIF(p.middle_name, '')) AS student_name
                         FROM student_accounts a
-                        INNER JOIN student_profiles p
-                            ON p.account_id = a.account_id
+                        INNER JOIN student_profiles p ON p.account_id = a.account_id
                         WHERE a.student_id = @studentId
-                        LIMIT 1;",
-                        connection);
-
-                    command.Parameters.AddWithValue(
-                        "@studentId", studentId);
+                        LIMIT 1;", connection);
+                    command.Parameters.AddWithValue("@studentId", studentId);
 
                     using var reader = command.ExecuteReader();
-
-                    if (!reader.Read())
+                    if (reader.Read())
                     {
-                        ShowError(
-                            "Student not found. The student must register " +
-                            "and save their information first.");
-                        return;
+                        accountId = reader.GetInt32(0);
+                        studentId = reader.GetString(1);
+                        fullName = reader.GetString(2);
                     }
-
-                    id = Convert.ToInt32(reader["account_id"]);
-                    databaseStudentId =
-                        reader["student_id"].ToString() ?? "";
-                    fullName =
-                        reader["student_name"].ToString() ?? "";
                 }
 
-                txtName.Text = fullName;
-
-                DataRow? existing = roster.Rows.Find(id);
-                string status = cmbStatus.SelectedItem!.ToString()!;
-
-                if (existing != null)
+                DataRow? existing = roster.Rows.Find(studentId);
+                if (fullName == null)
                 {
-                    existing["Status"] = status;
-                    existing["StudentId"] = databaseStudentId;
-                    existing["StudentName"] = fullName;
+                    if (existing != null && surname.Length == 0 &&
+                        firstName.Length == 0 && middleName.Length == 0)
+                    {
+                        // A status-only edit keeps the saved name intact.
+                        fullName = (string)existing["StudentName"];
+                    }
+                    else
+                    {
+                        if (surname.Length == 0 || firstName.Length == 0)
+                        {
+                            ShowError("Enter the surname and first name.");
+                            (surname.Length == 0 ? txtSurname : txtFirstName).Focus();
+                            return;
+                        }
+
+                        fullName = middleName.Length == 0
+                            ? $"{surname} {firstName}"
+                            : $"{surname} {firstName} {middleName}";
+
+                        if (fullName.Length > 300)
+                        {
+                            ShowError("The combined student name must be 300 characters or fewer.");
+                            return;
+                        }
+                    }
                 }
+
+                object[] values = { (object?)accountId ?? DBNull.Value, studentId, status, fullName };
+                if (existing == null)
+                    roster.Rows.Add(values);
                 else
-                {
-                    roster.Rows.Add(
-                        id, databaseStudentId, status, fullName);
-                }
+                    existing.ItemArray = values;
 
+                txtStudentId.Text = studentId;
+                ClearStudentNameInputs();
                 hasChanges = true;
             }
             catch (MySqlException ex)
             {
-                ShowError("Unable to find the student.\n\n" + ex.Message);
+                ShowError("Unable to look up the student.\n\n" + ex.Message);
             }
         }
 
         private void DropStudent(object? sender, EventArgs e)
         {
             string studentId = txtStudentId.Text.Trim();
-            DataRow? target = null;
-
-            if (studentId.Length > 0)
-            {
-                foreach (DataRow row in roster.Rows)
-                {
-                    if (string.Equals(
-                        row["StudentId"].ToString(),
-                        studentId,
-                        StringComparison.OrdinalIgnoreCase))
-                    {
-                        target = row;
-                        break;
-                    }
-                }
-            }
-            else if (tablepanel.CurrentRow?.DataBoundItem
-                is DataRowView selected)
-            {
-                target = selected.Row;
-            }
+            DataRow? target = studentId.Length > 0
+                ? roster.Rows.Find(studentId)
+                : (tablepanel.SelectedRows.Count > 0
+                    ? (tablepanel.SelectedRows[0].DataBoundItem as DataRowView)?.Row
+                    : null);
 
             if (target == null)
             {
@@ -543,12 +526,131 @@ namespace BUCS_SIS
                 return;
             }
 
+            pendingDrops[(string)target["StudentId"]] = ReadRosterEntry(target);
             roster.Rows.Remove(target);
             hasChanges = true;
 
             txtStudentId.Clear();
-            txtName.Clear();
+            ClearStudentNameInputs();
             tablepanel.ClearSelection();
+        }
+
+        private sealed record DroppedStudent(
+            string StudentId, int? AccountId, string Name, string Status)
+        {
+            public override string ToString() => $"{Name} ({StudentId}) — {Status}";
+        }
+
+        private void RestoreStudent(object? sender, EventArgs e)
+        {
+            var choices = new Dictionary<string, DroppedStudent>(StringComparer.OrdinalIgnoreCase);
+            foreach (var drop in pendingDrops)
+            {
+                if (roster.Rows.Find(drop.Key) == null)
+                {
+                    var entry = drop.Value;
+                    choices[drop.Key] = new DroppedStudent(
+                        drop.Key, entry.AccountId, entry.Name, entry.Status);
+                }
+            }
+
+            try
+            {
+                using var connection = new MySqlConnection(connectionString);
+                connection.Open();
+                using var command = CreateRosterCommand(connection, included: false);
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    string studentId = reader.GetString(1);
+                    if (roster.Rows.Find(studentId) != null)
+                        continue;
+
+                    choices.TryAdd(studentId, new DroppedStudent(
+                        studentId,
+                        reader.IsDBNull(0) ? null : reader.GetInt32(0),
+                        reader.GetString(3),
+                        reader.GetString(2)));
+                }
+            }
+            catch (MySqlException ex)
+            {
+                ShowError("Unable to load saved drops.\n\n" + ex.Message);
+                if (choices.Count == 0)
+                    return;
+            }
+
+            if (choices.Count == 0)
+            {
+                MessageBox.Show(this, "There are no dropped students in this cohort.");
+                return;
+            }
+
+            using var dialog = new Form
+            {
+                Text = "Restore Student",
+                StartPosition = FormStartPosition.CenterParent,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false,
+                ClientSize = new Size(560, 125),
+                AutoScaleMode = AutoScaleMode.Font
+            };
+
+            var students = new ComboBox
+            {
+                AccessibleName = "Dropped students",
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Sorted = true,
+                Location = new Point(16, 38),
+                Width = 528
+            };
+            foreach (var student in choices.Values)
+                students.Items.Add(student);
+            students.SelectedIndex = 0;
+
+            var label = new Label
+            {
+                Text = "Select a dropped student from this cohort.",
+                AutoSize = true,
+                Location = new Point(16, 13)
+            };
+            var restore = new Button
+            {
+                Text = "Restore",
+                DialogResult = DialogResult.OK,
+                Location = new Point(360, 78),
+                Size = new Size(88, 30)
+            };
+            var cancel = new Button
+            {
+                Text = "Cancel",
+                DialogResult = DialogResult.Cancel,
+                Location = new Point(456, 78),
+                Size = new Size(88, 30)
+            };
+            dialog.Controls.AddRange(new Control[] { label, students, restore, cancel });
+            dialog.AcceptButton = restore;
+            dialog.CancelButton = cancel;
+
+            if (dialog.ShowDialog(this) != DialogResult.OK ||
+                students.SelectedItem is not DroppedStudent selected)
+                return;
+
+            txtSearchStudent.Clear();
+            roster.Rows.Add((object?)selected.AccountId ?? DBNull.Value,
+                selected.StudentId, selected.Status, selected.Name);
+            pendingDrops.Remove(selected.StudentId);
+            hasChanges = true;
+            txtStudentId.Text = selected.StudentId;
+            cmbStatus.SelectedItem = selected.Status;
+        }
+
+        private void ClearStudentNameInputs()
+        {
+            txtSurname.Clear();
+            txtFirstName.Clear();
+            txtMiddleName.Clear();
         }
 
         private void RosterSelectionChanged(
@@ -561,7 +663,7 @@ namespace BUCS_SIS
             }
 
             txtStudentId.Text = selected["StudentId"].ToString();
-            txtName.Text = selected["StudentName"].ToString();
+            ClearStudentNameInputs();
             cmbStatus.SelectedItem = selected["Status"].ToString();
         }
 
@@ -607,43 +709,31 @@ namespace BUCS_SIS
                     }
                 }
 
-                HashSet<int> current = new HashSet<int>();
-
                 foreach (DataRow row in roster.Rows)
                 {
-                    int id = Convert.ToInt32(row["AccountId"]);
-                    current.Add(id);
-
-                    SaveOverride(
-                        connection,
-                        transaction,
-                        id,
-                        true,
-                        row["Status"].ToString()!);
+                    string studentId = (string)row["StudentId"];
+                    var entry = ReadRosterEntry(row);
+                    if (!originalStudents.TryGetValue(studentId, out var previous) || entry != previous)
+                    {
+                        SaveRosterEntry(connection, transaction, studentId, entry, true);
+                    }
                 }
 
-                foreach (int id in originalStudents)
+                foreach (var original in originalStudents)
                 {
-                    if (!current.Contains(id))
+                    if (roster.Rows.Find(original.Key) == null)
                     {
-                        SaveOverride(
-                            connection,
-                            transaction,
-                            id,
-                            false,
-                            "Regular");
+                        var dropped = pendingDrops.TryGetValue(original.Key, out var entry)
+                            ? entry
+                            : original.Value;
+                        SaveRosterEntry(connection, transaction, original.Key, dropped, false);
                     }
                 }
 
                 transaction.Commit();
+                pendingDrops.Clear();
+                CaptureOriginalStudents();
                 CaptureSavedEnrollmentCounts();
-
-                originalStudents.Clear();
-
-                foreach (int id in current)
-                {
-                    originalStudents.Add(id);
-                }
 
                 hasChanges = false;
 
@@ -662,6 +752,51 @@ namespace BUCS_SIS
             {
                 ShowError(ex.Message);
             }
+        }
+
+        private void CaptureOriginalStudents()
+        {
+            originalStudents.Clear();
+            foreach (DataRow row in roster.Rows)
+                originalStudents.Add((string)row["StudentId"], ReadRosterEntry(row));
+        }
+
+        private static (int? AccountId, string Name, string Status) ReadRosterEntry(DataRow row)
+        {
+            return (
+                row.IsNull("AccountId") ? null : (int)row["AccountId"],
+                (string)row["StudentName"],
+                (string)row["Status"]);
+        }
+
+        private void SaveRosterEntry(
+            MySqlConnection connection,
+            MySqlTransaction transaction,
+            string studentId,
+            (int? AccountId, string Name, string Status) entry,
+            bool included)
+        {
+            if (entry.AccountId is int accountId)
+            {
+                SaveOverride(connection, transaction, accountId, included, entry.Status);
+                return;
+            }
+
+            using var command = new MySqlCommand(@"
+                INSERT INTO faculty_manual_students
+                    (cohort_id, student_id, full_name, enrollment_status, is_included)
+                VALUES (@cohort, @studentId, @name, @status, @included)
+                ON DUPLICATE KEY UPDATE
+                    full_name = @name,
+                    enrollment_status = @status,
+                    is_included = @included;", connection, transaction);
+
+            command.Parameters.AddWithValue("@cohort", cohortId);
+            command.Parameters.AddWithValue("@studentId", studentId);
+            command.Parameters.AddWithValue("@name", entry.Name);
+            command.Parameters.AddWithValue("@status", entry.Status);
+            command.Parameters.AddWithValue("@included", included);
+            command.ExecuteNonQuery();
         }
 
         private void CaptureSavedEnrollmentCounts()
